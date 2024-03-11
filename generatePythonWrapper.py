@@ -1,5 +1,6 @@
 import re
 import argparse
+from pathlib import Path
 
 
 def parse_matlab_file(matlab_file_path):
@@ -101,8 +102,9 @@ def generate_function(function_name, input_parser_params):
     process = subprocess.Popen(cmdString, shell=True)
     process.wait()
     """
-    with open("/home/matt/PyLLSM5DTools/out.py", "w") as text_file:
-        print(f"{functionString}", file=text_file)
+    output_file = Path(f"/home/matt/PyLLSM5DTools/src/{function_name}.py")
+    output_file.parent.mkdir(exist_ok=True, parents=True)
+    output_file.write_text(f"{functionString}")
 
     return
 
