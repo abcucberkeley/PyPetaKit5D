@@ -19,9 +19,13 @@ class CustomInstall(install):
     def download_and_extract_matlab_runtime(self, install_dir):
         # Define MATLAB runtime URL and directory
         # matlab_runtime_url = "https://download.osgeo.org/libtiff/tiff-4.6.0.tar.xz"
+        llsm5dtools_url = "https://github.com/abcucberkeley/LLSM5DTools/archive/refs/heads/main.zip"
+        llsm5dtools_github_dir = os.path.join(install_dir, "LLSM5DTools-main")
+        llsm5dtools_dir = os.path.join(install_dir, "LLSM5DTools")
+        llsm5dtools_zip_loc = os.path.join(install_dir, "LLSM5DTools.zip")
+
         matlab_runtime_tmp_dir = os.path.join(install_dir, "matlabRuntimeTmp")
         matlab_runtime_dir = os.path.join(install_dir, "MATLAB_Runtime")
-
         matlab_runtime_zip_loc = os.path.join(install_dir, "matlabRuntime.zip")
         # Create directory if it doesn't exist
 
@@ -30,12 +34,20 @@ class CustomInstall(install):
 
         # Download and extract MATLAB runtime
         try:
+            if not os.path.exists(llsm5dtools_dir) or not os.listdir(llsm5dtools_dir):
+                os.makedirs(os.path.dirname(llsm5dtools_zip_loc), exist_ok=True)
+                if not os.path.exists(llsm5dtools_zip_loc):
+                    urllib.request.urlretrieve(llsm5dtools_url, llsm5dtools_zip_loc)
+                process = subprocess.Popen(
+                    f"unzip -o -q \"{llsm5dtools_zip_loc}\" -d \"{install_dir}\"", shell=True)
+                process.wait()
+                os.rename(llsm5dtools_github_dir, llsm5dtools_dir)
+                os.remove(llsm5dtools_zip_loc)
             matlab_runtime_ver_dir = os.path.join(matlab_runtime_dir, "R2023a")
-            if not os.path.isfile(matlab_runtime_ver_dir) or not os.listdir(matlab_runtime_ver_dir):
-                if not os.path.exists(matlab_runtime_tmp_dir):
-                    os.makedirs(matlab_runtime_tmp_dir)
+            if not os.path.exists(matlab_runtime_ver_dir) or not os.listdir(matlab_runtime_ver_dir):
+                os.makedirs(os.path.dirname(matlab_runtime_zip_loc), exist_ok=True)
                 # Download MATLAB runtime
-                if not os.path.isfile(matlab_runtime_zip_loc):
+                if not os.path.exists(matlab_runtime_zip_loc):
                     urllib.request.urlretrieve(matlab_runtime_url, matlab_runtime_zip_loc)
                 process = subprocess.Popen(
                     f"unzip -o -q \"{matlab_runtime_zip_loc}\" -d \"{matlab_runtime_tmp_dir}\"", shell=True)
