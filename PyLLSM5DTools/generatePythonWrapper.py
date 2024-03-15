@@ -25,7 +25,9 @@ def parse_matlab_file(matlab_file_path):
     return function_name, input_parser_params
 
 
-def generate_function(function_name, input_parser_params):
+def generate_function(matlab_file_path):
+    function_name, input_parser_params = parse_matlab_file(matlab_file_path)
+
     if "_parser" in function_name:
         function_name = function_name.replace("_parser", "")
     functionString = "import subprocess\n\n\ndef " + function_name + "("
@@ -138,6 +140,4 @@ if __name__ == "__main__":
     parser.add_argument('matlab_file', type=str, help='Path to MATLAB file')
     args = parser.parse_args()
 
-    function_name, input_parser_params = parse_matlab_file(args.matlab_file)
-
-    generate_function(function_name, input_parser_params)
+    generate_function(args.matlab_file)
