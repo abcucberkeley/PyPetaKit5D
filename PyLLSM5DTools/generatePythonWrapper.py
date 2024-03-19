@@ -1,3 +1,10 @@
+"""
+This script generates a Python wrapper function based on a matlab script.
+This script is not intended to be used by end users as all the PyLLSM5DTools scripts should be installed with
+pip install PyLLSM5DTools
+
+Usage: python generatePythonWrapper.py path/to/matlab_file.m
+"""
 import re
 import argparse
 from pathlib import Path
@@ -8,9 +15,10 @@ def parse_matlab_file(matlab_file_path):
         matlab_function = file.read()
 
     # Extract function name and arguments
-    match = re.match(r"function \[\] = (\w+)\((.*)\)", matlab_function)
+    #match = re.match(r"function \[\] = (\w+)\((.*)\)", matlab_function)
+    match = re.match(r"function (?:\[\] = )?(\w+)\((.*)\)", matlab_function)
     if not match:
-        raise ValueError("Invalid MATLAB function format")
+        raise ValueError(f"Invalid MATLAB function format for file: {matlab_file_path}")
 
     function_name = match.group(1)
 
@@ -30,7 +38,7 @@ def generate_function(matlab_file_path):
 
     if "_parser" in function_name:
         function_name = function_name.replace("_parser", "")
-    functionString = "import subprocess\n\n\ndef " + function_name + "("
+    functionString = "import os\nimport subprocess\n\n\ndef " + function_name + "("
 
     # Count the number of strings with only one comma
     numRequired = sum(param.count(',') == 1 for param in input_parser_params)
@@ -65,10 +73,16 @@ def generate_function(matlab_file_path):
                 varTypes[i] = "logical"
                 extracted_string = extracted_string.capitalize()
         elif "isnumeric" in param or "isscalar" in param or "isvector" in param:
+            if "pi" in extracted_string:
+                if "import math\n" not in functionString:
+                    functionString = "import math\n"+functionString
+                extracted_string = extracted_string.replace("pi","math.pi")
             if "isvector" in param or bool(re.search(r'\[[^,]+,.*]', extracted_string)) or "lastStart" in param:
                 varTypes[i] = "numericArr"
             else:
                 varTypes[i] = "numericScalar"
+        elif "@(x)isempty(x)||ischar(x)" in param:
+            varTypes[i] = "char"
         else:
             varTypes[i] = "err"
         if i < numRequired:
@@ -78,17 +92,25 @@ def generate_function(matlab_file_path):
         if firstString == "parseCluster":
             extracted_string = "False"
         functionString = functionString + f"\"{firstString}\": [kwargs.get(\"{firstString}\", {extracted_string}), \"{varTypes[i]}\"],\n        "
-
-    functionString = functionString[:-10] + "\n    }\n\n    "
-    functionString += "mccMasterLoc = \"/home/matt/LLSM_Processing_GUI/LLSM5DTools/mcc/linux/run_mccMaster.sh\"\n    "
-    functionString += "matlabRuntimeLoc = \"/home/matt/LLSM_Processing_GUI/MATLAB_Runtime/R2023a\"\n    "
+    if len(input_parser_params) > numRequired:
+        functionString = functionString[:-10] + "\n    }\n\n    "
+    else:
+        functionString = functionString[:-8] + "\n    }\n\n    "
+    jvm_function_names = ["XR_visualize_OTF_mask_segmentation", "XR_FSC_analysis_wrapper", "XR_psf_analysis_wrapper", "XR_psf_detection_and_analysis_wrapper"]
+    if function_name in jvm_function_names:
+        functionString += "mccMasterLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh\"\n    "
+    else:
+        functionString += "mccMasterLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh\"\n    "
+    functionString += "matlabRuntimeLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a\"\n    "
     for i, firstString in enumerate(first_strings[:numRequired]):
         if varTypes[i] == "cell":
             functionString += f"{firstString}String = \"{{\" + \",\".join(f\"\'{{item}}\'\" for item in {firstString}) + \"}}\"\n    "
-        if "numeric" in varTypes[i]:
+        elif "numeric" in varTypes[i]:
             functionString += f"{firstString}String = \"[\" + \",\".join(str(item) for item in {firstString}) + \"]\"\n    "
         else:
-            # Assume it is a cell array
+            if firstString == "psfFn":
+                continue
+            # Assume it is a cell array otherwise
             functionString += f"{firstString}String = \"{{\" + \",\".join(f\"\'{{item}}\'\" for item in {firstString}) + \"}}\"\n    "
     functionString += "cmdString = f\"\\\"{mccMasterLoc}\\\" \\\"{matlabRuntimeLoc}\\\" {function_name} "
     for i, firstString in enumerate(first_strings[:numRequired]):
@@ -128,7 +150,7 @@ def generate_function(matlab_file_path):
     process = subprocess.Popen(cmdString, shell=True)
     process.wait()
     """
-    output_file = Path(f"/home/matt/PyLLSM5DTools/src/{function_name}.py")
+    output_file = Path(f"/home/matt/PyLLSM5DTools/PyLLSM5DTools/{function_name}.py")
     output_file.parent.mkdir(exist_ok=True, parents=True)
     output_file.write_text(f"{functionString}")
 
