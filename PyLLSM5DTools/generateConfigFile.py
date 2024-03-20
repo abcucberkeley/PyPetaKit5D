@@ -1,3 +1,4 @@
+import os
 import json
 from pathlib import Path
 
@@ -6,8 +7,8 @@ def generateConfigFile(out_file, **kwargs):
     config_file_dict = {
         "BashLaunchStr": kwargs.get("BashLaunchStr", ""),
         "GNUparallel": kwargs.get("GNUparallel", True),
-        "MCCMasterStr": kwargs.get("MCCMasterStr", "/home/matt/LLSM_Processing_GUI/LLSM5DTools/mcc/linux/run_mccMaster.sh"),
-        "MCRParam": kwargs.get("MCRParam", "/home/matt/LLSM_Processing_GUI/MATLAB_Runtime/R2023a"),
+        "MCCMasterStr": kwargs.get("MCCMasterStr", f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"),
+        "MCRParam": kwargs.get("MCRParam", f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"),
         "MemPerCPU": kwargs.get("MemPerCPU", .01),
         "SlurmParam": kwargs.get("BashLaunchStr", ""),
         "jobTimeLimit": kwargs.get("jobTimeLimit", 12),

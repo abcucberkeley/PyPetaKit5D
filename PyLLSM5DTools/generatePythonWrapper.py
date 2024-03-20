@@ -15,7 +15,6 @@ def parse_matlab_file(matlab_file_path):
         matlab_function = file.read()
 
     # Extract function name and arguments
-    #match = re.match(r"function \[\] = (\w+)\((.*)\)", matlab_function)
     match = re.match(r"function (?:\[\] = )?(\w+)\((.*)\)", matlab_function)
     if not match:
         raise ValueError(f"Invalid MATLAB function format for file: {matlab_file_path}")
@@ -48,18 +47,21 @@ def generate_function(matlab_file_path):
         functionString = functionString + first_strings[i] + ", "
     functionString = functionString + f"**kwargs):\n    function_name = \"{function_name}\"\n    {function_name}_dict = {{\n        "
     varTypes = [""] * len(input_parser_params)
+    # Have to hard code some variables that are ambiguous at the moment
+    numericArrVars = ["shardSize", "zarrSubSize", "padSize", "boundboxCrop", "timepoints", "subtimepoints"]
+    logicalArrVars = ["stitchMIP"]
     for i, (param, firstString) in enumerate(zip(input_parser_params, first_strings)):
         extracted_string = ""
         if i >= numRequired:
             extracted_string = re.search(r",'?(.*?)'?,@", param).group(1)
-        if "@ischar" in param or "@(x)ischar(x)" in param or "ismember" in param or "strcmpi" in param:
-            varTypes[i] = "char"
-        elif "iscell" in param:
+        if "iscell" in param:
             extracted_string = extracted_string.replace("{", "[")
             extracted_string = extracted_string.replace("}", "]")
             varTypes[i] = "cell"
+        elif "@ischar" in param or "@(x)ischar(x)" in param or "ismember" in param or "strcmpi" in param:
+            varTypes[i] = "char"
         elif "islogical" in param:
-            if "[" in extracted_string and bool(re.search(r'\[[^,]+,.*]', extracted_string)) :
+            if ("[" in extracted_string and bool(re.search(r'\[[^,]+,.*]', extracted_string))) or any(logicalArrVar in param for logicalArrVar in logicalArrVars):
                 extracted_string = '[' + ','.join(
                     [element.strip().capitalize() for element in extracted_string[1:-1].split(',')]) + ']'
                 varTypes[i] = "logicalArr"
@@ -77,7 +79,8 @@ def generate_function(matlab_file_path):
                 if "import math\n" not in functionString:
                     functionString = "import math\n"+functionString
                 extracted_string = extracted_string.replace("pi","math.pi")
-            if "isvector" in param or bool(re.search(r'\[[^,]+,.*]', extracted_string)) or "lastStart" in param:
+            if ("isvector" in param or bool(re.search(r'\[[^,]+,.*]', extracted_string)) or "lastStart" in param or
+                "resample" in param or "Bbox" in param or any(numericArrVar in param for numericArrVar in numericArrVars)):
                 varTypes[i] = "numericArr"
             else:
                 varTypes[i] = "numericScalar"
@@ -126,6 +129,8 @@ def generate_function(matlab_file_path):
                 continue
             cmdString += f"\\\"{{key}}\\\" \\\"{{value[0]}}\\\" "
         elif value[1] == "cell":
+            if not value[0]:
+                continue
             cellString = "{{" + ",".join(f"'{{item}}'" for item in value[0]) + "}}"
             cmdString += f"\\\"{{key}}\\\" \\\"{{cellString}}\\\" "
         elif value[1] == "logicalArr":

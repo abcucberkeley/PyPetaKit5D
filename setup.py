@@ -12,7 +12,7 @@ from setuptools.command.install import install
 matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2023a/Release/6/deployment_files"
                       "/installer/complete/glnxa64/MATLAB_Runtime_R2023a_Update_6_glnxa64.zip")
 name = 'PyLLSM5DTools'
-version = '1.0.0'
+version = '1.0.01'
 
 
 class CustomInstall(install):
@@ -70,8 +70,6 @@ class CustomInstall(install):
 
 
 install_dir = os.path.join(site.getsitepackages()[0], name)
-print(":)!\n")
-sys.stdout.flush()
 
 setup(
     name=name,
@@ -92,6 +90,3 @@ setup(
         'install': CustomInstall,
     }
 )
-# print(files(f'{name}'))
-# install_dir = f"{s.command_obj['install'].install_base}/{name}-{version}.dist-info/"
-# download_and_extract_matlab_runtime(install_dir)
