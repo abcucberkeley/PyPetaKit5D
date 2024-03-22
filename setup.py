@@ -1,24 +1,21 @@
+import os
 import shutil
 import site
-import os
 import subprocess
 import sys
 import urllib.request
-import zipfile
 
-from setuptools import setup, find_packages, Command
+from setuptools import setup, find_packages
 from setuptools.command.install import install
 
 matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2023a/Release/6/deployment_files"
                       "/installer/complete/glnxa64/MATLAB_Runtime_R2023a_Update_6_glnxa64.zip")
 name = 'PyLLSM5DTools'
-version = '1.0.01'
+version = '1.0.0'
 
 
 class CustomInstall(install):
     def download_and_extract_matlab_runtime(self, install_dir):
-        # Define MATLAB runtime URL and directory
-        # matlab_runtime_url = "https://download.osgeo.org/libtiff/tiff-4.6.0.tar.xz"
         llsm5dtools_url = "https://github.com/abcucberkeley/LLSM5DTools/archive/refs/heads/main.zip"
         llsm5dtools_github_dir = os.path.join(install_dir, "LLSM5DTools-main")
         llsm5dtools_dir = os.path.join(install_dir, "LLSM5DTools")
@@ -27,10 +24,6 @@ class CustomInstall(install):
         matlab_runtime_tmp_dir = os.path.join(install_dir, "matlabRuntimeTmp")
         matlab_runtime_dir = os.path.join(install_dir, "MATLAB_Runtime")
         matlab_runtime_zip_loc = os.path.join(install_dir, "matlabRuntime.zip")
-        # Create directory if it doesn't exist
-
-        #if not os.path.exists(matlab_runtime_dir):
-        #    os.makedirs(matlab_runtime_dir)
 
         # Download and extract MATLAB runtime
         try:
@@ -55,7 +48,9 @@ class CustomInstall(install):
 
                 install_file_loc = f"{matlab_runtime_tmp_dir}/install"
 
-                process = subprocess.Popen(f"\"{install_file_loc}\" -agreeToLicense yes -destinationFolder \"{matlab_runtime_dir}\"", shell=True)
+                process = subprocess.Popen(
+                    f"\"{install_file_loc}\" -agreeToLicense yes -destinationFolder \"{matlab_runtime_dir}\"",
+                    shell=True)
                 process.wait()
                 os.remove(matlab_runtime_zip_loc)
                 shutil.rmtree(matlab_runtime_tmp_dir)
@@ -68,8 +63,6 @@ class CustomInstall(install):
         install_dir = os.path.join(site.getsitepackages()[0], name)
         self.download_and_extract_matlab_runtime(install_dir)
 
-
-install_dir = os.path.join(site.getsitepackages()[0], name)
 
 setup(
     name=name,
