@@ -4,7 +4,7 @@
 
 This package has been tested with Python 3.11 but other versions may also work
 
-Installation may take a long time
+The installation may take a long time
 ````
 pip install --no-binary :all: --no-cache-dir PyLLSM5DTools
 ````
