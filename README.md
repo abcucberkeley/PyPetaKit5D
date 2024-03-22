@@ -1,5 +1,25 @@
 # PyLLSM5DTools
 
+## Installation
+
+This package has been tested with Python 3.11 but other versions may also work
+
+Installation may take a long time
+````
+pip install --no-binary :all: --no-cache-dir PyLLSM5DTools
+````
+
+## Uninstallation
+
+It is recommended to use -v as it makes the uninstall much faster for this package
+````
+pip uninstall PyLLSM5DTools -v
+````
+
+## Usage
+
+Please refer to the [examples.ipynb](https://github.com/abcucberkeley/PyLLSM5DTools/blob/main/examples.ipynb) notebook for step-by-step usage examples using our demo dataset
+
 ## Reference
 
 Please cite our software if you find it useful in your work:
