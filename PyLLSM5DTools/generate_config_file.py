@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 
-def generateConfigFile(out_file, **kwargs):
+def generate_config_file(out_file, **kwargs):
     config_file_dict = {
         "BashLaunchStr": kwargs.get("BashLaunchStr", ""),
         "GNUparallel": kwargs.get("GNUparallel", True),
@@ -23,6 +23,3 @@ def generateConfigFile(out_file, **kwargs):
     output_file.write_text(json.dumps(config_file_dict, ensure_ascii=False, indent=4))
     return
 
-
-if __name__ == "__main__":
-    generateConfigFile("testConfig.json")

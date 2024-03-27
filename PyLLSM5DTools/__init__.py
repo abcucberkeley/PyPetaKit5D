@@ -12,3 +12,4 @@ from .XR_resample_dataset import XR_resample_dataset
 from .XR_tiffToZarr_wrapper import XR_tiffToZarr_wrapper
 from .XR_visualize_OTF_mask_segmentation import XR_visualize_OTF_mask_segmentation
 from .XR_zarrToTiff_wrapper import XR_zarrToTiff_wrapper
+from .generate_config_file import generate_config_file
