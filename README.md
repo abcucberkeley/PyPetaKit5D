@@ -18,7 +18,7 @@ pip uninstall PyLLSM5DTools -v
 
 ## Usage
 
-Please refer to the [examples.ipynb](https://github.com/abcucberkeley/PyLLSM5DTools/blob/main/examples.ipynb) notebook for step-by-step usage examples using our demo dataset
+Please refer to the [examples.ipynb](https://github.com/abcucberkeley/PyLLSM5DTools/blob/main/examples.ipynb) notebook for step-by-step usage examples using our demo dataset. For a more detailed explanation of all the input variables, you can refer to our GUI's [wiki](https://github.com/abcucberkeley/LLSM_Processing_GUI/wiki)
 
 ## Reference
 
