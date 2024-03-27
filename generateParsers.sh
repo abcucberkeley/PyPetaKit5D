@@ -51,3 +51,4 @@ for file in /home/matt/LLSM_Processing_GUI/LLSM5DTools/mcc/*_parser.m; do
     fi
 done
 
+echo "from .generateConfigFile import generateConfigFile" >> "$output_file"
