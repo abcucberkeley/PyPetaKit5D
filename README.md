@@ -2,7 +2,7 @@
 
 ## Installation
 
-This package has been tested with Python 3.11 but other versions may also work
+This package is currently only available for Linux and has been tested with Python 3.11 but other versions may also work
 
 The installation may take a long time
 ````
