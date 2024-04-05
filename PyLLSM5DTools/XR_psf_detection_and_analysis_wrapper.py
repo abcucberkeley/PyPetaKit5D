@@ -17,7 +17,6 @@ def XR_psf_detection_and_analysis_wrapper(dataPaths, **kwargs):
         "sourceStr": [kwargs.get("sourceStr", "test"), "char"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", False), "logical"],
-        "prefix": [kwargs.get("prefix", "test_"), "char"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
     }

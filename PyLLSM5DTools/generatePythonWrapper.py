@@ -24,23 +24,26 @@ def parse_matlab_file(matlab_file_path):
     # Extract inputParser parameters
     input_parser_params_addRequired = re.findall(r"ip\.addRequired\((.*?)(?:\s*,(.*))?\);", matlab_function)
     input_parser_params_addParameter = re.findall(r"ip\.addParameter\((.*)\s*,(.*)\s*,(.*)\);", matlab_function)
+    input_parser_params_addOptional = re.findall(r"ip\.addOptional\((.*)\s*,(.*)\s*,(.*)\);", matlab_function)
+    num_optional = len(input_parser_params_addOptional)
 
     # Concatenate the capture groups and remove spaces
     input_parser_params = [",".join(param).replace(" ", "") for param in input_parser_params_addRequired]
     input_parser_params += [",".join(param).replace(" ", "") for param in input_parser_params_addParameter]
+    input_parser_params += [",".join(param).replace(" ", "") for param in input_parser_params_addOptional]
 
-    return function_name, input_parser_params
+    return function_name, input_parser_params, num_optional
 
 
 def generate_function(matlab_file_path):
-    function_name, input_parser_params = parse_matlab_file(matlab_file_path)
+    function_name, input_parser_params, num_optional = parse_matlab_file(matlab_file_path)
 
     if "_parser" in function_name:
         function_name = function_name.replace("_parser", "")
     functionString = "import os\nimport subprocess\n\n\ndef " + function_name + "("
 
     # Count the number of strings with only one comma
-    numRequired = sum(param.count(',') == 1 for param in input_parser_params)
+    numRequired = sum(param.count(',') == 1 for param in input_parser_params)+num_optional
     addRequired = True
     first_strings = [re.search(r"'([^']*)'", param).group(1) for param in input_parser_params]
     for i in range(numRequired):

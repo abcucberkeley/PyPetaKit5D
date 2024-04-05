@@ -6,15 +6,15 @@ def XR_MIP_wrapper(dataPaths, **kwargs):
     function_name = "XR_MIP_wrapper"
     XR_MIP_wrapper_dict = {
         "axis": [kwargs.get("axis", [0,0,1]), "numericArr"],
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0']), "cell"],
+        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
         "largeZarr": [kwargs.get("largeZarr", False), "logical"],
         "Save16bit": [kwargs.get("Save16bit", True), "logical"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "parseParfor": [kwargs.get("parseParfor", False), "logical"],
-        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs/"), "char"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
-        "cpusPerTask": [kwargs.get("cpusPerTask", 1), "numericScalar"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 3), "numericScalar"],
+        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs/"), "char"],
         "uuid": [kwargs.get("uuid", ""), "char"],
         "debug": [kwargs.get("debug", False), "logical"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],

@@ -25,7 +25,7 @@ done
 printf -v whitelist_str "%s " "${whitelist[@]}"
 echo "Whitelist: $whitelist_str"
 
-for file in /home/matt/LLSM_Processing_GUI/LLSM5DTools/mcc/*_parser.m; do
+for file in /home/matt/LLSM_Processing_GUI/LLSM5DTools/mcc/parsers/*_parser.m; do
 	file_name=$(basename "$file" .m)
 
     # Check if the function name contains any of the whitelisted patterns
@@ -51,4 +51,4 @@ for file in /home/matt/LLSM_Processing_GUI/LLSM5DTools/mcc/*_parser.m; do
     fi
 done
 
-echo "from .generateConfigFile import generateConfigFile" >> "$output_file"
+echo "from .generate_config_file import generate_config_file" >> "$output_file"
