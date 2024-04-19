@@ -2,13 +2,20 @@ import os
 import subprocess
 
 
-def XR_resample_dataset(dataPath, resultPath, rsfactor, **kwargs):
+def XR_resample_dataset(dataPaths, rsfactor, **kwargs):
     function_name = "XR_resample_dataset"
     XR_resample_dataset_dict = {
+        "outDirStr": [kwargs.get("outDirStr", "resampled"), "char"],
+        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
+        "bbox": [kwargs.get("bbox", []), "numericScalar"],
         "Interp": [kwargs.get("Interp", "linear"), "char"],
         "Save16bit": [kwargs.get("Save16bit", True), "logical"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
+        "largeZarr": [kwargs.get("largeZarr", False), "logical"],
         "saveZarr": [kwargs.get("saveZarr", False), "logical"],
+        "blockSize": [kwargs.get("blockSize", [256,256,256]), "numericArr"],
+        "batchSize": [kwargs.get("batchSize", [512,512,512]), "numericArr"],
+        "BorderSize": [kwargs.get("BorderSize", [5,5,5]), "numericArr"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
@@ -20,10 +27,9 @@ def XR_resample_dataset(dataPath, resultPath, rsfactor, **kwargs):
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
-    dataPathString = "{" + ",".join(f"'{item}'" for item in dataPath) + "}"
-    resultPathString = "{" + ",".join(f"'{item}'" for item in resultPath) + "}"
+    dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
     rsfactorString = "[" + ",".join(str(item) for item in rsfactor) + "]"
-    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPath}\" \"{resultPath}\" \"{rsfactorString}\" "
+    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{rsfactorString}\" "
     
     for key, value in XR_resample_dataset_dict.items():
         if value[1] == "char":
