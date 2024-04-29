@@ -25,7 +25,6 @@ def XR_matlab_stitching_wrapper(dataPath, imageListFileName, **kwargs):
         "batchSize": [kwargs.get("batchSize", [500,500,500]), "numericArr"],
         "blockSize": [kwargs.get("blockSize", [500,500,500]), "numericArr"],
         "shardSize": [kwargs.get("shardSize", []), "numericArr"],
-        "zarrSubSize": [kwargs.get("zarrSubSize", []), "numericArr"],
         "resampleType": [kwargs.get("resampleType", "xy_isotropic"), "char"],
         "resample": [kwargs.get("resample", []), "numericArr"],
         "InputBbox": [kwargs.get("InputBbox", []), "numericArr"],
