@@ -5,12 +5,13 @@ import subprocess
 def XR_MIP_wrapper(dataPaths, **kwargs):
     function_name = "XR_MIP_wrapper"
     XR_MIP_wrapper_dict = {
+        "resultDirName": [kwargs.get("resultDirName", "MIPs"), "char"],
         "axis": [kwargs.get("axis", [0,0,1]), "numericArr"],
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
         "largeZarr": [kwargs.get("largeZarr", False), "logical"],
-        "BatchSize": [kwargs.get("BatchSize", [2048,2048,2048]), "numericArr"],
-        "Save16bit": [kwargs.get("Save16bit", True), "logical"],
+        "batchSize": [kwargs.get("batchSize", [2048,2048,2048]), "numericArr"],
+        "save16bit": [kwargs.get("save16bit", True), "logical"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "parseParfor": [kwargs.get("parseParfor", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
@@ -19,7 +20,7 @@ def XR_MIP_wrapper(dataPaths, **kwargs):
         "uuid": [kwargs.get("uuid", ""), "char"],
         "debug": [kwargs.get("debug", False), "logical"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"

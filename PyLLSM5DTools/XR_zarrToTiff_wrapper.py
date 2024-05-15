@@ -5,9 +5,9 @@ import subprocess
 def XR_zarrToTiff_wrapper(dataPaths, **kwargs):
     function_name = "XR_zarrToTiff_wrapper"
     XR_zarrToTiff_wrapper_dict = {
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['CamA','CamB']), "cell"],
-        "resultDirStr": [kwargs.get("resultDirStr", "tiffs/"), "char"],
-        "usrFcn": [kwargs.get("usrFcn", ), "err"],
+        "resultDirName": [kwargs.get("resultDirName", "tiffs"), "char"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA','CamB']), "cell"],
+        "usrFcn": [kwargs.get("usrFcn", ""), "err"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
         "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
@@ -16,7 +16,7 @@ def XR_zarrToTiff_wrapper(dataPaths, **kwargs):
         "maxTrialNum": [kwargs.get("maxTrialNum", 3), "numericScalar"],
         "unitWaitTime": [kwargs.get("unitWaitTime", 30), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"

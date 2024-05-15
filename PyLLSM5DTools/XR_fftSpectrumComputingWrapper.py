@@ -5,17 +5,23 @@ import subprocess
 def XR_fftSpectrumComputingWrapper(dataPaths, **kwargs):
     function_name = "XR_fftSpectrumComputingWrapper"
     XR_fftSpectrumComputingWrapper_dict = {
-        "Overwrite": [kwargs.get("Overwrite", False), "logical"],
+        "resultDirName": [kwargs.get("resultDirName", "FFT"), "char"],
+        "overwrite": [kwargs.get("overwrite", False), "logical"],
         "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
         "dz": [kwargs.get("dz", 0.1), "numericScalar"],
+        "zarrFile": [kwargs.get("zarrFile", False), "logical"],
         "outPixelSize": [kwargs.get("outPixelSize", []), "numericScalar"],
-        "N": [kwargs.get("N", [1001,1001,1001]), "numericArr"],
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", []), "cell"],
+        "outSize": [kwargs.get("outSize", [1001,1001,1001]), "numericArr"],
+        "channelPatterns": [kwargs.get("channelPatterns", []), "cell"],
         "save3DStack": [kwargs.get("save3DStack", False), "logical"],
         "background": [kwargs.get("background", 0), "numericScalar"],
-        "Interp": [kwargs.get("Interp", "linear"), "char"],
+        "interpMethod": [kwargs.get("interpMethod", "linear"), "char"],
+        "parseCluster": [kwargs.get("parseCluster", False), "logical"],
+        "masterCompute": [kwargs.get("masterCompute", True), "logical"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 3), "numericScalar"],
+        "debug": [kwargs.get("debug", False), "logical"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"

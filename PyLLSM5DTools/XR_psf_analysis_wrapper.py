@@ -7,21 +7,22 @@ def XR_psf_analysis_wrapper(dataPaths, **kwargs):
     XR_psf_analysis_wrapper_dict = {
         "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
         "dz": [kwargs.get("dz", 0.1), "numericScalar"],
-        "angle": [kwargs.get("angle", 32.45), "numericScalar"],
-        "Deskew": [kwargs.get("Deskew", True), "logical"],
+        "skewAngle": [kwargs.get("skewAngle", 32.45), "numericScalar"],
+        "deskew": [kwargs.get("deskew", True), "logical"],
         "flipZstack": [kwargs.get("flipZstack", False), "logical"],
-        "ObjectiveScan": [kwargs.get("ObjectiveScan", False), "logical"],
-        "ZstageScan": [kwargs.get("ZstageScan", False), "logical"],
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
-        "Channels": [kwargs.get("Channels", [488,560]), "numericArr"],
-        "Save16bit": [kwargs.get("Save16bit", True), "logical"],
+        "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
+        "zStageScan": [kwargs.get("zStageScan", False), "logical"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
+        "channels": [kwargs.get("channels", [488,560]), "numericArr"],
+        "save16bit": [kwargs.get("save16bit", True), "logical"],
         "bgFactor": [kwargs.get("bgFactor", 1.5), "numericScalar"],
         "RWFn": [kwargs.get("RWFn", ['/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_515em_128_128_101_100nmSteps.tif','/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_605em_128_128_101_100nmSteps.tif']), "cell"],
         "sourceStr": [kwargs.get("sourceStr", "test"), "char"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", False), "logical"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 8), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh"

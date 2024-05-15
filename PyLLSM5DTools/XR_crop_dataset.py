@@ -2,33 +2,33 @@ import os
 import subprocess
 
 
-def XR_crop_dataset(dataPaths, resultPaths, bbox, **kwargs):
+def XR_crop_dataset(dataPaths, inputBbox, **kwargs):
     function_name = "XR_crop_dataset"
     XR_crop_dataset_dict = {
+        "resultDirName": [kwargs.get("resultDirName", "Cropped"), "char"],
         "cropType": [kwargs.get("cropType", "fixed"), "char"],
         "pad": [kwargs.get("pad", False), "logical"],
-        "lastStart": [kwargs.get("lastStart", []), "numericArr"],
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
+        "lastStartCoords": [kwargs.get("lastStartCoords", []), "numericArr"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
         "largeZarr": [kwargs.get("largeZarr", False), "logical"],
         "saveZarr": [kwargs.get("saveZarr", False), "logical"],
-        "BlockSize": [kwargs.get("BlockSize", [500,500,500]), "numericArr"],
-        "Save16bit": [kwargs.get("Save16bit", False), "logical"],
+        "blockSize": [kwargs.get("blockSize", [500,500,500]), "numericArr"],
+        "save16bit": [kwargs.get("save16bit", False), "logical"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
         "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
         "cpusPerTask": [kwargs.get("cpusPerTask", 2), "numericScalar"],
         "uuid": [kwargs.get("uuid", ""), "char"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
-    resultPathsString = "{" + ",".join(f"'{item}'" for item in resultPaths) + "}"
-    bboxString = "[" + ",".join(str(item) for item in bbox) + "]"
-    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{resultPathsString}\" \"{bboxString}\" "
+    inputBboxString = "[" + ",".join(str(item) for item in inputBbox) + "]"
+    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{inputBboxString}\" "
     
     for key, value in XR_crop_dataset_dict.items():
         if value[1] == "char":

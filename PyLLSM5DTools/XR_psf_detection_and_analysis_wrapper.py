@@ -11,14 +11,14 @@ def XR_psf_detection_and_analysis_wrapper(dataPaths, **kwargs):
         "cropSize": [kwargs.get("cropSize", [256,128,201]), "numericArr"],
         "flipZstack": [kwargs.get("flipZstack", False), "logical"],
         "distThresh": [kwargs.get("distThresh", [256,128,201]), "numericArr"],
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
-        "Channels": [kwargs.get("Channels", [488,560]), "numericArr"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
+        "channels": [kwargs.get("channels", [488,560]), "numericArr"],
         "RWFn": [kwargs.get("RWFn", ['/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_515em_128_128_101_100nmSteps.tif','/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_605em_128_128_101_100nmSteps.tif']), "cell"],
         "sourceStr": [kwargs.get("sourceStr", "test"), "char"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", False), "logical"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh"

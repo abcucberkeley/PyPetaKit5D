@@ -2,20 +2,21 @@ import os
 import subprocess
 
 
-def XR_tiffToZarr_wrapper(tiffFullpaths, **kwargs):
+def XR_tiffToZarr_wrapper(dataPaths, **kwargs):
     function_name = "XR_tiffToZarr_wrapper"
     XR_tiffToZarr_wrapper_dict = {
-        "zarrPathstr": [kwargs.get("zarrPathstr", "zarr"), "char"],
+        "tiffFullpaths": [kwargs.get("tiffFullpaths", ""), "cell"],
+        "resultDirName": [kwargs.get("resultDirName", "zarr"), "char"],
         "locIds": [kwargs.get("locIds", []), "numericScalar"],
         "blockSize": [kwargs.get("blockSize", [500,500,250]), "numericArr"],
         "shardSize": [kwargs.get("shardSize", []), "numericArr"],
         "flippedTile": [kwargs.get("flippedTile", []), "logical"],
-        "resample": [kwargs.get("resample", []), "numericArr"],
+        "resampleFactor": [kwargs.get("resampleFactor", []), "numericArr"],
         "partialFile": [kwargs.get("partialFile", False), "logical"],
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['tif']), "cell"],
-        "InputBbox": [kwargs.get("InputBbox", []), "numericArr"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['tif']), "cell"],
+        "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
         "tileOutBbox": [kwargs.get("tileOutBbox", []), "numericArr"],
-        "processFunPath": [kwargs.get("processFunPath", ), "cell"],
+        "processFunPath": [kwargs.get("processFunPath", ""), "cell"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "bigData": [kwargs.get("bigData", True), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
@@ -23,15 +24,15 @@ def XR_tiffToZarr_wrapper(tiffFullpaths, **kwargs):
         "cpusPerTask": [kwargs.get("cpusPerTask", 1), "numericScalar"],
         "uuid": [kwargs.get("uuid", ""), "char"],
         "maxTrialNum": [kwargs.get("maxTrialNum", 3), "numericScalar"],
-        "unitWaitTime": [kwargs.get("unitWaitTime", 30), "numericScalar"],
+        "unitWaitTime": [kwargs.get("unitWaitTime", 3), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
-    tiffFullpathsString = "{" + ",".join(f"'{item}'" for item in tiffFullpaths) + "}"
-    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{tiffFullpathsString}\" "
+    dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
+    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
     
     for key, value in XR_tiffToZarr_wrapper_dict.items():
         if value[1] == "char":

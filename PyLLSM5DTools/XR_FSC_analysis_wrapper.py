@@ -6,18 +6,18 @@ import subprocess
 def XR_FSC_analysis_wrapper(dataPaths, **kwargs):
     function_name = "XR_FSC_analysis_wrapper"
     XR_FSC_analysis_wrapper_dict = {
-        "outDirstr": [kwargs.get("outDirstr", "FSCs"), "char"],
+        "resultDirName": [kwargs.get("resultDirName", "FSCs"), "char"],
         "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
         "dz": [kwargs.get("dz", 0.1), "numericScalar"],
         "dr": [kwargs.get("dr", 1), "numericScalar"],
         "dtheta": [kwargs.get("dtheta", math.pi/12), "numericScalar"],
         "resThreshMethod": [kwargs.get("resThreshMethod", "fixed"), "char"],
         "resThresh": [kwargs.get("resThresh", 0.2), "numericScalar"],
-        "N": [kwargs.get("N", [251,251,251]), "numericArr"],
-        "bbox": [kwargs.get("bbox", []), "numericScalar"],
+        "halfSize": [kwargs.get("halfSize", [251,251,251]), "numericArr"],
+        "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
         "resAxis": [kwargs.get("resAxis", "xz"), "char"],
         "skipConeRegion": [kwargs.get("skipConeRegion", True), "logical"],
-        "ChannelPatterns": [kwargs.get("ChannelPatterns", ['tif']), "cell"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['tif']), "cell"],
         "Channels": [kwargs.get("Channels", [488,560]), "numericArr"],
         "multiRegions": [kwargs.get("multiRegions", False), "logical"],
         "regionInterval": [kwargs.get("regionInterval", [50,50,-1]), "numericArr"],
@@ -27,8 +27,9 @@ def XR_FSC_analysis_wrapper(dataPaths, **kwargs):
         "iterInterval": [kwargs.get("iterInterval", 5), "numericScalar"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 4), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "ConfigFile": [kwargs.get("ConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh"
