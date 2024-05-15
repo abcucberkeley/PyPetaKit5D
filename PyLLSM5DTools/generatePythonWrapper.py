@@ -93,7 +93,7 @@ def generate_function(matlab_file_path):
             varTypes[i] = "err"
         if i < numRequired:
             continue
-        if varTypes[i] == "char":
+        if varTypes[i] == "char" or not extracted_string:
             extracted_string = f"\"{extracted_string}\""
         if firstString == "parseCluster":
             extracted_string = "False"
