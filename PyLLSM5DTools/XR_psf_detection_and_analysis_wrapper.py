@@ -44,6 +44,8 @@ def XR_psf_detection_and_analysis_wrapper(dataPaths, **kwargs):
         elif value[1] == "numericArr":
             if not value[0]:
                 continue
+            if type(value[0]) is not list:
+                value[0] = [value[0]]
             numericArrString = "[" + ",".join(str(item) for item in value[0]) + "]"
             cmdString += f"\"{key}\" \"{numericArrString}\" "
         elif value[1] == "numericScalar":

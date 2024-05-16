@@ -11,7 +11,7 @@ from setuptools.command.install import install
 matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2023a/Release/6/deployment_files"
                       "/installer/complete/glnxa64/MATLAB_Runtime_R2023a_Update_6_glnxa64.zip")
 name = 'PyLLSM5DTools'
-version = '1.1.0'
+version = '1.1.1'
 
 
 class CustomInstall(install):
@@ -25,17 +25,19 @@ class CustomInstall(install):
         matlab_runtime_dir = os.path.join(install_dir, "MATLAB_Runtime")
         matlab_runtime_zip_loc = os.path.join(install_dir, "matlabRuntime.zip")
 
-        # Download and extract MATLAB runtime
+        # Download and extract LLSM5DTools and the MATLAB runtime
         try:
-            if not os.path.exists(llsm5dtools_dir) or not os.listdir(llsm5dtools_dir):
-                os.makedirs(os.path.dirname(llsm5dtools_zip_loc), exist_ok=True)
-                if not os.path.exists(llsm5dtools_zip_loc):
-                    urllib.request.urlretrieve(llsm5dtools_url, llsm5dtools_zip_loc)
-                process = subprocess.Popen(
-                    f"unzip -o -q \"{llsm5dtools_zip_loc}\" -d \"{install_dir}\"", shell=True)
-                process.wait()
-                os.rename(llsm5dtools_github_dir, llsm5dtools_dir)
-                os.remove(llsm5dtools_zip_loc)
+            if os.path.exists(llsm5dtools_dir):
+                shutil.rmtree(llsm5dtools_dir)
+            os.makedirs(os.path.dirname(llsm5dtools_zip_loc), exist_ok=True)
+            if not os.path.exists(llsm5dtools_zip_loc):
+                urllib.request.urlretrieve(llsm5dtools_url, llsm5dtools_zip_loc)
+            process = subprocess.Popen(
+                f"unzip -o -q \"{llsm5dtools_zip_loc}\" -d \"{install_dir}\"", shell=True)
+            process.wait()
+            os.rename(llsm5dtools_github_dir, llsm5dtools_dir)
+            os.remove(llsm5dtools_zip_loc)
+
             matlab_runtime_ver_dir = os.path.join(matlab_runtime_dir, "R2023a")
             if not os.path.exists(matlab_runtime_ver_dir) or not os.listdir(matlab_runtime_ver_dir):
                 os.makedirs(os.path.dirname(matlab_runtime_zip_loc), exist_ok=True)

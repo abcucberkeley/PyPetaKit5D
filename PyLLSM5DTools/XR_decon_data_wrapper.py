@@ -10,7 +10,7 @@ def XR_decon_data_wrapper(dataPaths, **kwargs):
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0']), "cell"],
         "skewAngle": [kwargs.get("skewAngle", 32.45), "numericScalar"],
         "dz": [kwargs.get("dz", 0.5), "numericScalar"],
-        "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericArr"],
+        "xyPixelSize": [kwargs.get("xyPixelSize", [0.108]), "numericArr"],
         "save16bit": [kwargs.get("save16bit", False), "logical"],
         "parseSettingFile": [kwargs.get("parseSettingFile", False), "logical"],
         "flipZstack": [kwargs.get("flipZstack", False), "logical"],
@@ -76,6 +76,8 @@ def XR_decon_data_wrapper(dataPaths, **kwargs):
         elif value[1] == "numericArr":
             if not value[0]:
                 continue
+            if type(value[0]) is not list:
+                value[0] = [value[0]]
             numericArrString = "[" + ",".join(str(item) for item in value[0]) + "]"
             cmdString += f"\"{key}\" \"{numericArrString}\" "
         elif value[1] == "numericScalar":

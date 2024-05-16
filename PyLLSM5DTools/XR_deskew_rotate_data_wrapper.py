@@ -12,7 +12,7 @@ def XR_deskew_rotate_data_wrapper(dataPaths, **kwargs):
         "overwrite": [kwargs.get("overwrite", False), "logical"],
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
         "dz": [kwargs.get("dz", 0.5), "numericScalar"],
-        "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericArr"],
+        "xyPixelSize": [kwargs.get("xyPixelSize", [0.108]), "numericArr"],
         "skewAngle": [kwargs.get("skewAngle", 32.45), "numericScalar"],
         "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
         "zStageScan": [kwargs.get("zStageScan", False), "logical"],
@@ -75,6 +75,8 @@ def XR_deskew_rotate_data_wrapper(dataPaths, **kwargs):
         elif value[1] == "numericArr":
             if not value[0]:
                 continue
+            if type(value[0]) is not list:
+                value[0] = [value[0]]
             numericArrString = "[" + ",".join(str(item) for item in value[0]) + "]"
             cmdString += f"\"{key}\" \"{numericArrString}\" "
         elif value[1] == "numericScalar":

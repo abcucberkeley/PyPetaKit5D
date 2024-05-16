@@ -95,6 +95,8 @@ def generate_function(matlab_file_path):
             continue
         if varTypes[i] == "char" or not extracted_string:
             extracted_string = f"\"{extracted_string}\""
+        if varTypes[i] == "numericArr" and "[" not in extracted_string:
+            extracted_string = f"[{extracted_string}]"
         if firstString == "parseCluster":
             extracted_string = "False"
         functionString = functionString + f"\"{firstString}\": [kwargs.get(\"{firstString}\", {extracted_string}), \"{varTypes[i]}\"],\n        "
@@ -144,6 +146,8 @@ def generate_function(matlab_file_path):
         elif value[1] == "numericArr":
             if not value[0]:
                 continue
+            if type(value[0]) is not list:
+                value[0] = [value[0]]
             numericArrString = "[" + ",".join(str(item) for item in value[0]) + "]"
             cmdString += f"\\\"{{key}}\\\" \\\"{{numericArrString}}\\\" "
         elif value[1] == "numericScalar":

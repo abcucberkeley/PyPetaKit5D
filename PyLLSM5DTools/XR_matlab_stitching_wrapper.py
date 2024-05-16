@@ -36,7 +36,7 @@ def XR_matlab_stitching_wrapper(dataPath, imageListFileName, **kwargs):
         "blendMethod": [kwargs.get("blendMethod", "none"), "char"],
         "overlapType": [kwargs.get("overlapType", ""), "char"],
         "xcorrShift": [kwargs.get("xcorrShift", True), "logical"],
-        "xyMaxOffset": [kwargs.get("xyMaxOffset", 300), "numericArr"],
+        "xyMaxOffset": [kwargs.get("xyMaxOffset", [300]), "numericArr"],
         "zMaxOffset": [kwargs.get("zMaxOffset", 50), "numericScalar"],
         "xcorrDownsample": [kwargs.get("xcorrDownsample", [2,2,1]), "numericArr"],
         "xcorrThresh": [kwargs.get("xcorrThresh", 0.25), "numericScalar"],
@@ -90,6 +90,8 @@ def XR_matlab_stitching_wrapper(dataPath, imageListFileName, **kwargs):
         elif value[1] == "numericArr":
             if not value[0]:
                 continue
+            if type(value[0]) is not list:
+                value[0] = [value[0]]
             numericArrString = "[" + ",".join(str(item) for item in value[0]) + "]"
             cmdString += f"\"{key}\" \"{numericArrString}\" "
         elif value[1] == "numericScalar":
