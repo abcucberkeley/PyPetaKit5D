@@ -7,7 +7,7 @@ def XR_psf_detection_and_analysis_wrapper(dataPaths, **kwargs):
     XR_psf_detection_and_analysis_wrapper_dict = {
         "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
         "dz": [kwargs.get("dz", 0.1), "numericScalar"],
-        "angle": [kwargs.get("angle", 32.45), "numericScalar"],
+        "skewAngle": [kwargs.get("skewAngle", 32.45), "numericScalar"],
         "cropSize": [kwargs.get("cropSize", [256,128,201]), "numericArr"],
         "flipZstack": [kwargs.get("flipZstack", False), "logical"],
         "distThresh": [kwargs.get("distThresh", [256,128,201]), "numericArr"],
