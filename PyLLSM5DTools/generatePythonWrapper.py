@@ -23,14 +23,14 @@ def parse_matlab_file(matlab_file_path):
 
     # Extract inputParser parameters
     input_parser_params_addRequired = re.findall(r"ip\.addRequired\((.*?)(?:\s*,(.*))?\);", matlab_function)
-    input_parser_params_addParameter = re.findall(r"ip\.addParameter\((.*)\s*,(.*)\s*,(.*)\);", matlab_function)
     input_parser_params_addOptional = re.findall(r"ip\.addOptional\((.*)\s*,(.*)\s*,(.*)\);", matlab_function)
+    input_parser_params_addParameter = re.findall(r"ip\.addParameter\((.*)\s*,(.*)\s*,(.*)\);", matlab_function)
     num_optional = len(input_parser_params_addOptional)
 
     # Concatenate the capture groups and remove spaces
     input_parser_params = [",".join(param).replace(" ", "") for param in input_parser_params_addRequired]
-    input_parser_params += [",".join(param).replace(" ", "") for param in input_parser_params_addParameter]
     input_parser_params += [",".join(param).replace(" ", "") for param in input_parser_params_addOptional]
+    input_parser_params += [",".join(param).replace(" ", "") for param in input_parser_params_addParameter]
 
     return function_name, input_parser_params, num_optional
 

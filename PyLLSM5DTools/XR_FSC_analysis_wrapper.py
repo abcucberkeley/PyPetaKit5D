@@ -9,7 +9,7 @@ def XR_FSC_analysis_wrapper(dataPaths, **kwargs):
         "resultDirName": [kwargs.get("resultDirName", "FSCs"), "char"],
         "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
         "dz": [kwargs.get("dz", 0.1), "numericScalar"],
-        "dr": [kwargs.get("dr", 1), "numericScalar"],
+        "dr": [kwargs.get("dr", 10), "numericScalar"],
         "dtheta": [kwargs.get("dtheta", math.pi/12), "numericScalar"],
         "resThreshMethod": [kwargs.get("resThreshMethod", "fixed"), "char"],
         "resThresh": [kwargs.get("resThresh", 0.2), "numericScalar"],
