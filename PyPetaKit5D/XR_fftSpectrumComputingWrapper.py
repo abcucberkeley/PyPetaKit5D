@@ -2,35 +2,34 @@ import os
 import subprocess
 
 
-def XR_psf_analysis_wrapper(dataPaths, **kwargs):
-    function_name = "XR_psf_analysis_wrapper"
-    XR_psf_analysis_wrapper_dict = {
+def XR_fftSpectrumComputingWrapper(dataPaths, **kwargs):
+    function_name = "XR_fftSpectrumComputingWrapper"
+    XR_fftSpectrumComputingWrapper_dict = {
+        "resultDirName": [kwargs.get("resultDirName", "FFT"), "char"],
+        "overwrite": [kwargs.get("overwrite", False), "logical"],
         "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
         "dz": [kwargs.get("dz", 0.1), "numericScalar"],
-        "skewAngle": [kwargs.get("skewAngle", 32.45), "numericScalar"],
-        "deskew": [kwargs.get("deskew", True), "logical"],
-        "flipZstack": [kwargs.get("flipZstack", False), "logical"],
-        "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
-        "zStageScan": [kwargs.get("zStageScan", False), "logical"],
-        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
-        "channels": [kwargs.get("channels", [488,560]), "numericArr"],
-        "save16bit": [kwargs.get("save16bit", True), "logical"],
-        "bgFactor": [kwargs.get("bgFactor", 1.5), "numericScalar"],
-        "RWFn": [kwargs.get("RWFn", ['/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_515em_128_128_101_100nmSteps.tif','/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_605em_128_128_101_100nmSteps.tif']), "cell"],
-        "sourceStr": [kwargs.get("sourceStr", "test"), "char"],
+        "zarrFile": [kwargs.get("zarrFile", False), "logical"],
+        "outPixelSize": [kwargs.get("outPixelSize", []), "numericScalar"],
+        "outSize": [kwargs.get("outSize", [1001,1001,1001]), "numericArr"],
+        "channelPatterns": [kwargs.get("channelPatterns", []), "cell"],
+        "save3DStack": [kwargs.get("save3DStack", False), "logical"],
+        "background": [kwargs.get("background", 0), "numericScalar"],
+        "interpMethod": [kwargs.get("interpMethod", "linear"), "char"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
-        "masterCompute": [kwargs.get("masterCompute", False), "logical"],
-        "cpusPerTask": [kwargs.get("cpusPerTask", 8), "numericScalar"],
+        "masterCompute": [kwargs.get("masterCompute", True), "logical"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 3), "numericScalar"],
+        "debug": [kwargs.get("debug", False), "logical"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
-    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh"
+    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
     cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
     
-    for key, value in XR_psf_analysis_wrapper_dict.items():
+    for key, value in XR_fftSpectrumComputingWrapper_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue

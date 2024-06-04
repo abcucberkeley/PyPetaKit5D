@@ -8,7 +8,7 @@ def XR_visualize_OTF_mask_segmentation(psfFn, OTFCumThresh, skewed, **kwargs):
         "minIntThrsh": [kwargs.get("minIntThrsh", 2.5e-3), "numericScalar"]
     }
 
-    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh"
+    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux_with_jvm/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     OTFCumThreshString = "[" + ",".join(str(item) for item in OTFCumThresh) + "]"
     skewedString = "{" + ",".join(f"'{item}'" for item in skewed) + "}"

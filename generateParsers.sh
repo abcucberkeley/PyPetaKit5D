@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Directory containing the Python files
-python_files_dir="/home/matt/PyLLSM5DTools/src"
-output_file="/home/matt/PyLLSM5DTools/PyLLSM5DTools/__init__.py"
+python_files_dir="/home/matt/PyPetaKit5D/src"
+output_file="/home/matt/PyPetaKit5D/PyPetaKit5D/__init__.py"
 
 # Clear the output file
 > "$output_file"
@@ -25,7 +25,7 @@ done
 printf -v whitelist_str "%s " "${whitelist[@]}"
 echo "Whitelist: $whitelist_str"
 
-for file in /home/matt/LLSM_Processing_GUI/LLSM5DTools/mcc/parsers/*_parser.m; do
+for file in /home/matt/PetaKit5D-GUI/PetaKit5D/mcc/parsers/*_parser.m; do
 	file_name=$(basename "$file" .m)
 
     # Check if the function name contains any of the whitelisted patterns
@@ -45,7 +45,7 @@ for file in /home/matt/LLSM_Processing_GUI/LLSM5DTools/mcc/parsers/*_parser.m; d
         echo "from .$function_name import $function_name" >> "$output_file"
 
         # Call your Python script here with the file path
-        python PyLLSM5DTools/generatePythonWrapper.py "$file"
+        python PyPetaKit5D/generatePythonWrapper.py "$file"
     else
         echo "Ignoring function: $file_name"
     fi

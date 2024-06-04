@@ -2,39 +2,35 @@ import os
 import subprocess
 
 
-def XR_tiffToZarr_wrapper(dataPaths, **kwargs):
-    function_name = "XR_tiffToZarr_wrapper"
-    XR_tiffToZarr_wrapper_dict = {
-        "tiffFullpaths": [kwargs.get("tiffFullpaths", ""), "cell"],
-        "resultDirName": [kwargs.get("resultDirName", "zarr"), "char"],
-        "locIds": [kwargs.get("locIds", []), "numericScalar"],
-        "blockSize": [kwargs.get("blockSize", [500,500,250]), "numericArr"],
-        "shardSize": [kwargs.get("shardSize", []), "numericArr"],
-        "flippedTile": [kwargs.get("flippedTile", []), "logical"],
-        "resampleFactor": [kwargs.get("resampleFactor", []), "numericArr"],
-        "partialFile": [kwargs.get("partialFile", False), "logical"],
-        "channelPatterns": [kwargs.get("channelPatterns", ['tif']), "cell"],
-        "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
-        "tileOutBbox": [kwargs.get("tileOutBbox", []), "numericArr"],
-        "processFunPath": [kwargs.get("processFunPath", ""), "cell"],
+def XR_psf_analysis_wrapper(dataPaths, **kwargs):
+    function_name = "XR_psf_analysis_wrapper"
+    XR_psf_analysis_wrapper_dict = {
+        "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
+        "dz": [kwargs.get("dz", 0.1), "numericScalar"],
+        "skewAngle": [kwargs.get("skewAngle", 32.45), "numericScalar"],
+        "deskew": [kwargs.get("deskew", True), "logical"],
+        "flipZstack": [kwargs.get("flipZstack", False), "logical"],
+        "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
+        "zStageScan": [kwargs.get("zStageScan", False), "logical"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
+        "channels": [kwargs.get("channels", [488,560]), "numericArr"],
+        "save16bit": [kwargs.get("save16bit", True), "logical"],
+        "bgFactor": [kwargs.get("bgFactor", 1.5), "numericScalar"],
+        "RWFn": [kwargs.get("RWFn", ['/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_515em_128_128_101_100nmSteps.tif','/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_605em_128_128_101_100nmSteps.tif']), "cell"],
+        "sourceStr": [kwargs.get("sourceStr", "test"), "char"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
-        "bigData": [kwargs.get("bigData", True), "logical"],
-        "masterCompute": [kwargs.get("masterCompute", True), "logical"],
-        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
-        "cpusPerTask": [kwargs.get("cpusPerTask", 1), "numericScalar"],
-        "uuid": [kwargs.get("uuid", ""), "char"],
-        "maxTrialNum": [kwargs.get("maxTrialNum", 3), "numericScalar"],
-        "unitWaitTime": [kwargs.get("unitWaitTime", 3), "numericScalar"],
+        "masterCompute": [kwargs.get("masterCompute", False), "logical"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 8), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
-    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"
+    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux_with_jvm/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
     cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
     
-    for key, value in XR_tiffToZarr_wrapper_dict.items():
+    for key, value in XR_psf_analysis_wrapper_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue

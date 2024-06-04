@@ -10,33 +10,33 @@ from setuptools.command.install import install
 
 matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2023a/Release/6/deployment_files"
                       "/installer/complete/glnxa64/MATLAB_Runtime_R2023a_Update_6_glnxa64.zip")
-name = 'PyLLSM5DTools'
-version = '1.1.3'
+name = 'PyPetaKit5D'
+version = '1.0.0'
 
 
 class CustomInstall(install):
     def download_and_extract_matlab_runtime(self, install_dir):
-        llsm5dtools_url = "https://github.com/abcucberkeley/LLSM5DTools/archive/refs/heads/main.zip"
-        llsm5dtools_github_dir = os.path.join(install_dir, "LLSM5DTools-main")
-        llsm5dtools_dir = os.path.join(install_dir, "LLSM5DTools")
-        llsm5dtools_zip_loc = os.path.join(install_dir, "LLSM5DTools.zip")
+        petakit5d_url = "https://github.com/abcucberkeley/PetaKit5D/archive/refs/heads/main.zip"
+        petakit5d_github_dir = os.path.join(install_dir, "PetaKit5D-main")
+        petakit5d_dir = os.path.join(install_dir, "PetaKit5D")
+        petakit5d_zip_loc = os.path.join(install_dir, "PetaKit5D.zip")
 
         matlab_runtime_tmp_dir = os.path.join(install_dir, "matlabRuntimeTmp")
         matlab_runtime_dir = os.path.join(install_dir, "MATLAB_Runtime")
         matlab_runtime_zip_loc = os.path.join(install_dir, "matlabRuntime.zip")
 
-        # Download and extract LLSM5DTools and the MATLAB runtime
+        # Download and extract PetaKit5D and the MATLAB runtime
         try:
-            if os.path.exists(llsm5dtools_dir):
-                shutil.rmtree(llsm5dtools_dir)
-            os.makedirs(os.path.dirname(llsm5dtools_zip_loc), exist_ok=True)
-            if not os.path.exists(llsm5dtools_zip_loc):
-                urllib.request.urlretrieve(llsm5dtools_url, llsm5dtools_zip_loc)
+            if os.path.exists(petakit5d_dir):
+                shutil.rmtree(petakit5d_dir)
+            os.makedirs(os.path.dirname(petakit5d_zip_loc), exist_ok=True)
+            if not os.path.exists(petakit5d_zip_loc):
+                urllib.request.urlretrieve(petakit5d_url, petakit5d_zip_loc)
             process = subprocess.Popen(
-                f"unzip -o -q \"{llsm5dtools_zip_loc}\" -d \"{install_dir}\"", shell=True)
+                f"unzip -o -q \"{petakit5d_zip_loc}\" -d \"{install_dir}\"", shell=True)
             process.wait()
-            os.rename(llsm5dtools_github_dir, llsm5dtools_dir)
-            os.remove(llsm5dtools_zip_loc)
+            os.rename(petakit5d_github_dir, petakit5d_dir)
+            os.remove(petakit5d_zip_loc)
 
             matlab_runtime_ver_dir = os.path.join(matlab_runtime_dir, "R2023a")
             if not os.path.exists(matlab_runtime_ver_dir) or not os.listdir(matlab_runtime_ver_dir):
@@ -69,8 +69,8 @@ class CustomInstall(install):
 setup(
     name=name,
     version=version,
-    description='A Python wrapper for LLSM5DTools',
-    url='https://github.com/abcucberkeley/PyLLSM5DTools',
+    description='A Python wrapper for PetaKit5D',
+    url='https://github.com/abcucberkeley/PyPetaKit5D',
     author='Matthew Mueller',
     author_email='matthewmueller@berkeley.edu',
     license='GPL-3.0',

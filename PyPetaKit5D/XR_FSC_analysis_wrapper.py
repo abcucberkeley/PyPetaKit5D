@@ -1,32 +1,43 @@
+import math
 import os
 import subprocess
 
 
-def XR_psf_detection_and_analysis_wrapper(dataPaths, **kwargs):
-    function_name = "XR_psf_detection_and_analysis_wrapper"
-    XR_psf_detection_and_analysis_wrapper_dict = {
+def XR_FSC_analysis_wrapper(dataPaths, **kwargs):
+    function_name = "XR_FSC_analysis_wrapper"
+    XR_FSC_analysis_wrapper_dict = {
+        "resultDirName": [kwargs.get("resultDirName", "FSCs"), "char"],
         "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
         "dz": [kwargs.get("dz", 0.1), "numericScalar"],
-        "skewAngle": [kwargs.get("skewAngle", 32.45), "numericScalar"],
-        "cropSize": [kwargs.get("cropSize", [256,128,201]), "numericArr"],
-        "flipZstack": [kwargs.get("flipZstack", False), "logical"],
-        "distThresh": [kwargs.get("distThresh", [256,128,201]), "numericArr"],
-        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
-        "channels": [kwargs.get("channels", [488,560]), "numericArr"],
-        "RWFn": [kwargs.get("RWFn", ['/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_515em_128_128_101_100nmSteps.tif','/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_605em_128_128_101_100nmSteps.tif']), "cell"],
-        "sourceStr": [kwargs.get("sourceStr", "test"), "char"],
+        "dr": [kwargs.get("dr", 10), "numericScalar"],
+        "dtheta": [kwargs.get("dtheta", math.pi/12), "numericScalar"],
+        "resThreshMethod": [kwargs.get("resThreshMethod", "fixed"), "char"],
+        "resThresh": [kwargs.get("resThresh", 0.2), "numericScalar"],
+        "halfSize": [kwargs.get("halfSize", [251,251,251]), "numericArr"],
+        "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
+        "resAxis": [kwargs.get("resAxis", "xz"), "char"],
+        "skipConeRegion": [kwargs.get("skipConeRegion", True), "logical"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['tif']), "cell"],
+        "Channels": [kwargs.get("Channels", [488,560]), "numericArr"],
+        "multiRegions": [kwargs.get("multiRegions", False), "logical"],
+        "regionInterval": [kwargs.get("regionInterval", [50,50,-1]), "numericArr"],
+        "regionGrid": [kwargs.get("regionGrid", []), "numericScalar"],
+        "clipPer": [kwargs.get("clipPer", []), "numericScalar"],
+        "suffix": [kwargs.get("suffix", "decon"), "char"],
+        "iterInterval": [kwargs.get("iterInterval", 5), "numericScalar"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
-        "masterCompute": [kwargs.get("masterCompute", False), "logical"],
+        "masterCompute": [kwargs.get("masterCompute", True), "logical"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 4), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
-    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh"
+    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux_with_jvm/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
     cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
     
-    for key, value in XR_psf_detection_and_analysis_wrapper_dict.items():
+    for key, value in XR_FSC_analysis_wrapper_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue

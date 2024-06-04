@@ -1,43 +1,36 @@
-import math
 import os
 import subprocess
 
 
-def XR_FSC_analysis_wrapper(dataPaths, **kwargs):
-    function_name = "XR_FSC_analysis_wrapper"
-    XR_FSC_analysis_wrapper_dict = {
-        "resultDirName": [kwargs.get("resultDirName", "FSCs"), "char"],
-        "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
-        "dz": [kwargs.get("dz", 0.1), "numericScalar"],
-        "dr": [kwargs.get("dr", 10), "numericScalar"],
-        "dtheta": [kwargs.get("dtheta", math.pi/12), "numericScalar"],
-        "resThreshMethod": [kwargs.get("resThreshMethod", "fixed"), "char"],
-        "resThresh": [kwargs.get("resThresh", 0.2), "numericScalar"],
-        "halfSize": [kwargs.get("halfSize", [251,251,251]), "numericArr"],
-        "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
-        "resAxis": [kwargs.get("resAxis", "xz"), "char"],
-        "skipConeRegion": [kwargs.get("skipConeRegion", True), "logical"],
-        "channelPatterns": [kwargs.get("channelPatterns", ['tif']), "cell"],
-        "Channels": [kwargs.get("Channels", [488,560]), "numericArr"],
-        "multiRegions": [kwargs.get("multiRegions", False), "logical"],
-        "regionInterval": [kwargs.get("regionInterval", [50,50,-1]), "numericArr"],
-        "regionGrid": [kwargs.get("regionGrid", []), "numericScalar"],
-        "clipPer": [kwargs.get("clipPer", []), "numericScalar"],
-        "suffix": [kwargs.get("suffix", "decon"), "char"],
-        "iterInterval": [kwargs.get("iterInterval", 5), "numericScalar"],
+def XR_crop_dataset(dataPaths, inputBbox, **kwargs):
+    function_name = "XR_crop_dataset"
+    XR_crop_dataset_dict = {
+        "resultDirName": [kwargs.get("resultDirName", "Cropped"), "char"],
+        "cropType": [kwargs.get("cropType", "fixed"), "char"],
+        "pad": [kwargs.get("pad", False), "logical"],
+        "lastStartCoords": [kwargs.get("lastStartCoords", []), "numericArr"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
+        "zarrFile": [kwargs.get("zarrFile", False), "logical"],
+        "largeZarr": [kwargs.get("largeZarr", False), "logical"],
+        "saveZarr": [kwargs.get("saveZarr", False), "logical"],
+        "blockSize": [kwargs.get("blockSize", [500,500,500]), "numericArr"],
+        "save16bit": [kwargs.get("save16bit", False), "logical"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
-        "cpusPerTask": [kwargs.get("cpusPerTask", 4), "numericScalar"],
+        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 2), "numericScalar"],
+        "uuid": [kwargs.get("uuid", ""), "char"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
-    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh"
+    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
-    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
+    inputBboxString = "[" + ",".join(str(item) for item in inputBbox) + "]"
+    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{inputBboxString}\" "
     
-    for key, value in XR_FSC_analysis_wrapper_dict.items():
+    for key, value in XR_crop_dataset_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue

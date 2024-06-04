@@ -2,33 +2,36 @@ import os
 import subprocess
 
 
-def XR_MIP_wrapper(dataPaths, **kwargs):
-    function_name = "XR_MIP_wrapper"
-    XR_MIP_wrapper_dict = {
-        "resultDirName": [kwargs.get("resultDirName", "MIPs"), "char"],
-        "axis": [kwargs.get("axis", [0,0,1]), "numericArr"],
+def XR_resample_dataset(dataPaths, resampleFactor, **kwargs):
+    function_name = "XR_resample_dataset"
+    XR_resample_dataset_dict = {
+        "resultDirName": [kwargs.get("resultDirName", "resampled"), "char"],
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
+        "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
+        "interpMethod": [kwargs.get("interpMethod", "linear"), "char"],
+        "save16bit": [kwargs.get("save16bit", True), "logical"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
         "largeZarr": [kwargs.get("largeZarr", False), "logical"],
-        "batchSize": [kwargs.get("batchSize", [2048,2048,2048]), "numericArr"],
-        "save16bit": [kwargs.get("save16bit", True), "logical"],
+        "saveZarr": [kwargs.get("saveZarr", False), "logical"],
+        "blockSize": [kwargs.get("blockSize", [256,256,256]), "numericArr"],
+        "batchSize": [kwargs.get("batchSize", [512,512,512]), "numericArr"],
+        "borderSize": [kwargs.get("borderSize", [5,5,5]), "numericArr"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
-        "parseParfor": [kwargs.get("parseParfor", False), "logical"],
+        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
-        "cpusPerTask": [kwargs.get("cpusPerTask", 3), "numericScalar"],
-        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs/"), "char"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 2), "numericScalar"],
         "uuid": [kwargs.get("uuid", ""), "char"],
-        "debug": [kwargs.get("debug", False), "logical"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
-    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"
+    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
-    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
+    resampleFactorString = "[" + ",".join(str(item) for item in resampleFactor) + "]"
+    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{resampleFactorString}\" "
     
-    for key, value in XR_MIP_wrapper_dict.items():
+    for key, value in XR_resample_dataset_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue

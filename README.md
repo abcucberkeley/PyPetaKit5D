@@ -1,4 +1,4 @@
-# PyLLSM5DTools
+# PyPetaKit5D
 
 ## Installation
 
@@ -6,19 +6,19 @@ This package is currently only available for Linux and has been tested with Pyth
 
 The installation may take a long time
 ````
-pip install --no-binary :all: --no-cache-dir PyLLSM5DTools
+pip install --no-binary :all: --no-cache-dir PyPetaKit5D
 ````
 
 ## Uninstallation
 
 It is recommended to use -v as it makes the uninstall much faster for this package
 ````
-pip uninstall PyLLSM5DTools -v
+pip uninstall PyPetaKit5D -v
 ````
 
 ## Usage
 
-Please refer to the [examples.ipynb](https://github.com/abcucberkeley/PyLLSM5DTools/blob/main/examples.ipynb) notebook for step-by-step usage examples using our demo dataset. For a more detailed explanation of all the input variables, you can refer to our GUI's [wiki](https://github.com/abcucberkeley/LLSM_Processing_GUI/wiki)
+Please refer to the [examples.ipynb](https://github.com/abcucberkeley/PyPetaKit5D/blob/main/examples.ipynb) notebook for step-by-step usage examples using our demo dataset. For a more detailed explanation of all the input variables, you can refer to our GUI's [wiki](https://github.com/abcucberkeley/PetaKit5D-GUI/wiki)
 
 ## Reference
 

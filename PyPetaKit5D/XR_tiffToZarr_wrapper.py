@@ -2,36 +2,39 @@ import os
 import subprocess
 
 
-def XR_resample_dataset(dataPaths, resampleFactor, **kwargs):
-    function_name = "XR_resample_dataset"
-    XR_resample_dataset_dict = {
-        "resultDirName": [kwargs.get("resultDirName", "resampled"), "char"],
-        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
+def XR_tiffToZarr_wrapper(dataPaths, **kwargs):
+    function_name = "XR_tiffToZarr_wrapper"
+    XR_tiffToZarr_wrapper_dict = {
+        "tiffFullpaths": [kwargs.get("tiffFullpaths", ""), "cell"],
+        "resultDirName": [kwargs.get("resultDirName", "zarr"), "char"],
+        "locIds": [kwargs.get("locIds", []), "numericScalar"],
+        "blockSize": [kwargs.get("blockSize", [500,500,250]), "numericArr"],
+        "shardSize": [kwargs.get("shardSize", []), "numericArr"],
+        "flippedTile": [kwargs.get("flippedTile", []), "logical"],
+        "resampleFactor": [kwargs.get("resampleFactor", []), "numericArr"],
+        "partialFile": [kwargs.get("partialFile", False), "logical"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['tif']), "cell"],
         "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
-        "interpMethod": [kwargs.get("interpMethod", "linear"), "char"],
-        "save16bit": [kwargs.get("save16bit", True), "logical"],
-        "zarrFile": [kwargs.get("zarrFile", False), "logical"],
-        "largeZarr": [kwargs.get("largeZarr", False), "logical"],
-        "saveZarr": [kwargs.get("saveZarr", False), "logical"],
-        "blockSize": [kwargs.get("blockSize", [256,256,256]), "numericArr"],
-        "batchSize": [kwargs.get("batchSize", [512,512,512]), "numericArr"],
-        "borderSize": [kwargs.get("borderSize", [5,5,5]), "numericArr"],
+        "tileOutBbox": [kwargs.get("tileOutBbox", []), "numericArr"],
+        "processFunPath": [kwargs.get("processFunPath", ""), "cell"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
-        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
+        "bigData": [kwargs.get("bigData", True), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
-        "cpusPerTask": [kwargs.get("cpusPerTask", 2), "numericScalar"],
+        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 1), "numericScalar"],
         "uuid": [kwargs.get("uuid", ""), "char"],
+        "maxTrialNum": [kwargs.get("maxTrialNum", 3), "numericScalar"],
+        "unitWaitTime": [kwargs.get("unitWaitTime", 3), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
-    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"
+    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
-    resampleFactorString = "[" + ",".join(str(item) for item in resampleFactor) + "]"
-    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{resampleFactorString}\" "
+    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
     
-    for key, value in XR_resample_dataset_dict.items():
+    for key, value in XR_tiffToZarr_wrapper_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue

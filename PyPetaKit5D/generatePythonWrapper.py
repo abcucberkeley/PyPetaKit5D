@@ -1,7 +1,8 @@
 """
 This script generates a Python wrapper function based on a matlab script.
-This script is not intended to be used by end users as all the PyLLSM5DTools scripts should be installed with
-pip install PyLLSM5DTools
+This script is not intended to be used by end users.
+The PyPetaKit5D scripts should be installed with:
+pip install PyPetaKit5D
 
 Usage: python generatePythonWrapper.py path/to/matlab_file.m
 """
@@ -106,9 +107,9 @@ def generate_function(matlab_file_path):
         functionString = functionString[:-8] + "\n    }\n\n    "
     jvm_function_names = ["XR_visualize_OTF_mask_segmentation", "XR_FSC_analysis_wrapper", "XR_psf_analysis_wrapper", "XR_psf_detection_and_analysis_wrapper"]
     if function_name in jvm_function_names:
-        functionString += "mccMasterLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux_with_jvm/run_mccMaster.sh\"\n    "
+        functionString += "mccMasterLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux_with_jvm/run_mccMaster.sh\"\n    "
     else:
-        functionString += "mccMasterLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh\"\n    "
+        functionString += "mccMasterLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh\"\n    "
     functionString += "matlabRuntimeLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a\"\n    "
     for i, firstString in enumerate(first_strings[:numRequired]):
         if varTypes[i] == "cell":
@@ -162,7 +163,7 @@ def generate_function(matlab_file_path):
     process = subprocess.Popen(cmdString, shell=True)
     process.wait()
     """
-    output_file = Path(f"/home/matt/PyLLSM5DTools/PyLLSM5DTools/{function_name}.py")
+    output_file = Path(f"/home/matt/PyPetaKit5D/PyPetaKit5D/{function_name}.py")
     output_file.parent.mkdir(exist_ok=True, parents=True)
     output_file.write_text(f"{functionString}")
 

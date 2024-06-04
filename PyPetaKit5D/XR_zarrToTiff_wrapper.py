@@ -2,34 +2,29 @@ import os
 import subprocess
 
 
-def XR_fftSpectrumComputingWrapper(dataPaths, **kwargs):
-    function_name = "XR_fftSpectrumComputingWrapper"
-    XR_fftSpectrumComputingWrapper_dict = {
-        "resultDirName": [kwargs.get("resultDirName", "FFT"), "char"],
-        "overwrite": [kwargs.get("overwrite", False), "logical"],
-        "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
-        "dz": [kwargs.get("dz", 0.1), "numericScalar"],
-        "zarrFile": [kwargs.get("zarrFile", False), "logical"],
-        "outPixelSize": [kwargs.get("outPixelSize", []), "numericScalar"],
-        "outSize": [kwargs.get("outSize", [1001,1001,1001]), "numericArr"],
-        "channelPatterns": [kwargs.get("channelPatterns", []), "cell"],
-        "save3DStack": [kwargs.get("save3DStack", False), "logical"],
-        "background": [kwargs.get("background", 0), "numericScalar"],
-        "interpMethod": [kwargs.get("interpMethod", "linear"), "char"],
+def XR_zarrToTiff_wrapper(dataPaths, **kwargs):
+    function_name = "XR_zarrToTiff_wrapper"
+    XR_zarrToTiff_wrapper_dict = {
+        "resultDirName": [kwargs.get("resultDirName", "tiffs"), "char"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA','CamB']), "cell"],
+        "usrFcn": [kwargs.get("usrFcn", ""), "err"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
-        "cpusPerTask": [kwargs.get("cpusPerTask", 3), "numericScalar"],
-        "debug": [kwargs.get("debug", False), "logical"],
+        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
+        "cpusPerTask": [kwargs.get("cpusPerTask", 1), "numericScalar"],
+        "uuid": [kwargs.get("uuid", ""), "char"],
+        "maxTrialNum": [kwargs.get("maxTrialNum", 3), "numericScalar"],
+        "unitWaitTime": [kwargs.get("unitWaitTime", 30), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
-    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/LLSM5DTools/mcc/linux/run_mccMaster.sh"
+    mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
     cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
     
-    for key, value in XR_fftSpectrumComputingWrapper_dict.items():
+    for key, value in XR_zarrToTiff_wrapper_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue
