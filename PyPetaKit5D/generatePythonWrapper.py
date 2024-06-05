@@ -95,7 +95,10 @@ def generate_function(matlab_file_path):
         if i < numRequired:
             continue
         if varTypes[i] == "char" or not extracted_string:
-            extracted_string = f"\"{extracted_string}\""
+            if firstString == "converterPath":
+                extracted_string = "f\"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh\""
+            else:
+                extracted_string = f"\"{extracted_string}\""
         if varTypes[i] == "numericArr" and "[" not in extracted_string:
             extracted_string = f"[{extracted_string}]"
         if firstString == "parseCluster":
