@@ -18,7 +18,7 @@ pip uninstall PyPetaKit5D -v
 
 ## Usage
 
-Please refer to the [example notebooks](https://github.com/abcucberkeley/PyPetaKit5D/blob/main/notebooks) for step-by-step usage examples using our demo dataset. For a more detailed explanation of all the input variables, you can refer to our GUI's [wiki](https://github.com/abcucberkeley/PetaKit5D-GUI/wiki)
+Please refer to the [example notebooks](https://github.com/abcucberkeley/PyPetaKit5D/blob/main/notebooks) for step-by-step usage examples using our demo datasets. For a more detailed explanation of all the input variables, you can refer to our GUI's [wiki](https://github.com/abcucberkeley/PetaKit5D-GUI/wiki)
 
 ## Reference
 
