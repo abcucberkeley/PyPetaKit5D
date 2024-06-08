@@ -17,7 +17,7 @@ def XR_generate_image_list_wrapper(dataPaths, generationMethod, **kwargs):
         "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
         "IOScan": [kwargs.get("IOScan", False), "logical"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
-        "overlapSize": [kwargs.get("overlapSize", []), "numericScalar"],
+        "overlapSize": [kwargs.get("overlapSize", []), "numericArr"],
         "overlapSizeType": [kwargs.get("overlapSizeType", "pixel"), "char"],
         "uuid": [kwargs.get("uuid", ""), "char"]
     }
@@ -25,7 +25,6 @@ def XR_generate_image_list_wrapper(dataPaths, generationMethod, **kwargs):
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
-    generationMethodString = "{" + ",".join(f"'{item}'" for item in generationMethod) + "}"
     cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{generationMethod}\" "
     
     for key, value in XR_generate_image_list_wrapper_dict.items():

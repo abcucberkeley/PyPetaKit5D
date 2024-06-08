@@ -52,7 +52,7 @@ def generate_function(matlab_file_path):
     functionString = functionString + f"**kwargs):\n    function_name = \"{function_name}\"\n    {function_name}_dict = {{\n        "
     varTypes = [""] * len(input_parser_params)
     # Have to hard code some variables that are ambiguous at the moment
-    numericArrVars = ["shardSize", "zarrSubSize", "padSize", "boundboxCrop", "timepoints", "subtimepoints"]
+    numericArrVars = ["shardSize", "zarrSubSize", "padSize", "boundboxCrop", "timepoints", "subtimepoints", "overlapSize"]
     logicalArrVars = ["stitchMIP"]
     for i, (param, firstString) in enumerate(zip(input_parser_params, first_strings)):
         extracted_string = ""
@@ -117,17 +117,19 @@ def generate_function(matlab_file_path):
     for i, firstString in enumerate(first_strings[:numRequired]):
         if varTypes[i] == "cell":
             functionString += f"{firstString}String = \"{{\" + \",\".join(f\"\'{{item}}\'\" for item in {firstString}) + \"}}\"\n    "
-        elif "numeric" in varTypes[i]:
+        elif varTypes[i] == "numericArr":
             functionString += f"{firstString}String = \"[\" + \",\".join(str(item) for item in {firstString}) + \"]\"\n    "
         else:
-            if firstString == "psfFn":
+            if firstString == "psfFn" or varTypes[i] == "char" or varTypes[i] == "numericScalar" or varTypes[i] == "logical":
                 continue
             # Assume it is a cell array otherwise
             functionString += f"{firstString}String = \"{{\" + \",\".join(f\"\'{{item}}\'\" for item in {firstString}) + \"}}\"\n    "
     functionString += "cmdString = f\"\\\"{mccMasterLoc}\\\" \\\"{matlabRuntimeLoc}\\\" {function_name} "
     for i, firstString in enumerate(first_strings[:numRequired]):
-        if varTypes[i] == "char":
+        if varTypes[i] == "char" or varTypes[i] == "numericScalar":
             functionString += f"\\\"{{{firstString}}}\\\" "
+        elif varTypes[i] == "logical":
+            functionString += f"\\\"{{str({firstString}).lower()}}\\\" "
         else:
             functionString += f"\\\"{{{firstString}String}}\\\" "
     functionString += "\"\n    "
