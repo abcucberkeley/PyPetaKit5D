@@ -2,33 +2,33 @@ import os
 import subprocess
 
 
-def XR_imaris_conversion_data_wrapper(dataPaths, **kwargs):
-    function_name = "XR_imaris_conversion_data_wrapper"
-    XR_imaris_conversion_data_wrapper_dict = {
-        "resultDirName": [kwargs.get("resultDirName", "imaris"), "char"],
-        "overwrite": [kwargs.get("overwrite", False), "logical"],
+def XR_generate_image_list_wrapper(dataPaths, generationMethod, **kwargs):
+    function_name = "XR_generate_image_list_wrapper"
+    XR_generate_image_list_wrapper_dict = {
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0']), "cell"],
-        "pixelSizes": [kwargs.get("pixelSizes", [0.108,0.108,0.108]), "numericArr"],
+        "tilePatterns": [kwargs.get("tilePatterns", ['0000t','ch0','000x','000y','000z']), "cell"],
+        "DS": [kwargs.get("DS", False), "logical"],
+        "DSR": [kwargs.get("DSR", False), "logical"],
+        "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
+        "dz": [kwargs.get("dz", 0.2), "numericScalar"],
+        "skewAngle": [kwargs.get("skewAngle", 32.45), "numericScalar"],
+        "axisOrder": [kwargs.get("axisOrder", "x,y,z"), "char"],
+        "dataOrder": [kwargs.get("dataOrder", "y,x,z"), "char"],
+        "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
+        "IOScan": [kwargs.get("IOScan", False), "logical"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
-        "blockSize": [kwargs.get("blockSize", [64,64,64]), "numericArr"],
-        "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
-        "timepoints": [kwargs.get("timepoints", []), "numericArr"],
-        "converterPath": [kwargs.get("converterPath", f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/microscopeDataProcessing/tools/Imaris/Parallel_Imaris_Writer/linux/parallelimariswriter"), "char"],
-        "parseCluster": [kwargs.get("parseCluster", False), "logical"],
-        "masterCompute": [kwargs.get("masterCompute", True), "logical"],
-        "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
-        "cpusPerTask": [kwargs.get("cpusPerTask", 24), "numericScalar"],
-        "uuid": [kwargs.get("uuid", ""), "char"],
-        "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "configFile": [kwargs.get("configFile", ""), "char"]
+        "overlapSize": [kwargs.get("overlapSize", []), "numericScalar"],
+        "overlapSizeType": [kwargs.get("overlapSizeType", "pixel"), "char"],
+        "uuid": [kwargs.get("uuid", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
-    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" "
+    generationMethodString = "{" + ",".join(f"'{item}'" for item in generationMethod) + "}"
+    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{generationMethod}\" "
     
-    for key, value in XR_imaris_conversion_data_wrapper_dict.items():
+    for key, value in XR_generate_image_list_wrapper_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue
