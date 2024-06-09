@@ -15,6 +15,7 @@ def XR_psf_detection_and_analysis_wrapper(dataPaths, **kwargs):
         "channels": [kwargs.get("channels", [488,560]), "numericArr"],
         "RWFn": [kwargs.get("RWFn", ['/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_515em_128_128_101_100nmSteps.tif','/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_605em_128_128_101_100nmSteps.tif']), "cell"],
         "sourceStr": [kwargs.get("sourceStr", "test"), "char"],
+        "visible": [kwargs.get("visible", True), "logical"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", False), "logical"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
