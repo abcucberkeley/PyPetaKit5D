@@ -5,7 +5,9 @@ import subprocess
 def XR_visualize_OTF_mask_segmentation(psfFn, OTFCumThresh, skewed, **kwargs):
     function_name = "XR_visualize_OTF_mask_segmentation"
     XR_visualize_OTF_mask_segmentation_dict = {
-        "minIntThrsh": [kwargs.get("minIntThrsh", 1e-3), "numericScalar"]
+        "minIntThrsh": [kwargs.get("minIntThrsh", 1e-3), "numericScalar"],
+        "visible": [kwargs.get("visible", True), "logical"],
+        "saveFig": [kwargs.get("saveFig", False), "logical"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux_with_jvm/run_mccMaster.sh"
