@@ -8,7 +8,7 @@ def XR_tiffToZarr_wrapper(dataPaths, **kwargs):
         "tiffFullpaths": [kwargs.get("tiffFullpaths", ""), "cell"],
         "resultDirName": [kwargs.get("resultDirName", "zarr"), "char"],
         "locIds": [kwargs.get("locIds", []), "numericScalar"],
-        "blockSize": [kwargs.get("blockSize", [500,500,250]), "numericArr"],
+        "blockSize": [kwargs.get("blockSize", [256,256,256]), "numericArr"],
         "shardSize": [kwargs.get("shardSize", []), "numericArr"],
         "flippedTile": [kwargs.get("flippedTile", []), "logical"],
         "resampleFactor": [kwargs.get("resampleFactor", []), "numericArr"],

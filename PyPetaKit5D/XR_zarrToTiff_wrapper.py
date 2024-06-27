@@ -6,7 +6,7 @@ def XR_zarrToTiff_wrapper(dataPaths, **kwargs):
     function_name = "XR_zarrToTiff_wrapper"
     XR_zarrToTiff_wrapper_dict = {
         "resultDirName": [kwargs.get("resultDirName", "tiffs"), "char"],
-        "channelPatterns": [kwargs.get("channelPatterns", ['CamA','CamB']), "cell"],
+        "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamB_ch0']), "cell"],
         "usrFcn": [kwargs.get("usrFcn", ""), "err"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
@@ -14,7 +14,7 @@ def XR_zarrToTiff_wrapper(dataPaths, **kwargs):
         "cpusPerTask": [kwargs.get("cpusPerTask", 1), "numericScalar"],
         "uuid": [kwargs.get("uuid", ""), "char"],
         "maxTrialNum": [kwargs.get("maxTrialNum", 3), "numericScalar"],
-        "unitWaitTime": [kwargs.get("unitWaitTime", 30), "numericScalar"],
+        "unitWaitTime": [kwargs.get("unitWaitTime", 1), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
         "configFile": [kwargs.get("configFile", ""), "char"]
     }

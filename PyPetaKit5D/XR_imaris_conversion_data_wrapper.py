@@ -12,7 +12,6 @@ def XR_imaris_conversion_data_wrapper(dataPaths, **kwargs):
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
         "blockSize": [kwargs.get("blockSize", [64,64,64]), "numericArr"],
         "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
-        "timepoints": [kwargs.get("timepoints", []), "numericArr"],
         "converterPath": [kwargs.get("converterPath", f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/microscopeDataProcessing/tools/Imaris/Parallel_Imaris_Writer/linux/parallelimariswriter"), "char"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],

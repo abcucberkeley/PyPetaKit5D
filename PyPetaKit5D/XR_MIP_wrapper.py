@@ -9,7 +9,7 @@ def XR_MIP_wrapper(dataPaths, **kwargs):
         "axis": [kwargs.get("axis", [0,0,1]), "numericArr"],
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
-        "largeZarr": [kwargs.get("largeZarr", False), "logical"],
+        "largeFile": [kwargs.get("largeFile", False), "logical"],
         "batchSize": [kwargs.get("batchSize", [2048,2048,2048]), "numericArr"],
         "save16bit": [kwargs.get("save16bit", True), "logical"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],

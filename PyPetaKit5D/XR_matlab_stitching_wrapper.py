@@ -2,9 +2,10 @@ import os
 import subprocess
 
 
-def XR_matlab_stitching_wrapper(dataPath, imageListFileName, **kwargs):
+def XR_matlab_stitching_wrapper(dataPaths, imageListFullpaths, **kwargs):
     function_name = "XR_matlab_stitching_wrapper"
     XR_matlab_stitching_wrapper_dict = {
+        "resultDirName": [kwargs.get("resultDirName", "matlab_stitch"), "char"],
         "streaming": [kwargs.get("streaming", False), "logical"],
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0']), "cell"],
         "multiLoc": [kwargs.get("multiLoc", False), "logical"],
@@ -22,25 +23,23 @@ def XR_matlab_stitching_wrapper(dataPath, imageListFileName, **kwargs):
         "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
         "IOScan": [kwargs.get("IOScan", False), "logical"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
-        "largeZarr": [kwargs.get("largeZarr", False), "logical"],
+        "largeFile": [kwargs.get("largeFile", False), "logical"],
         "poolSize": [kwargs.get("poolSize", []), "numericScalar"],
-        "batchSize": [kwargs.get("batchSize", [500,500,500]), "numericArr"],
-        "blockSize": [kwargs.get("blockSize", [500,500,500]), "numericArr"],
+        "batchSize": [kwargs.get("batchSize", [512,512,512]), "numericArr"],
+        "blockSize": [kwargs.get("blockSize", [256,256,256]), "numericArr"],
         "shardSize": [kwargs.get("shardSize", []), "numericArr"],
         "resampleType": [kwargs.get("resampleType", "xy_isotropic"), "char"],
         "resampleFactor": [kwargs.get("resampleFactor", []), "numericArr"],
         "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
         "tileOutBbox": [kwargs.get("tileOutBbox", []), "numericArr"],
         "tileOffset": [kwargs.get("tileOffset", 0), "numericScalar"],
-        "resultDirName": [kwargs.get("resultDirName", "matlab_stitch"), "char"],
-        "blendMethod": [kwargs.get("blendMethod", "none"), "char"],
+        "blendMethod": [kwargs.get("blendMethod", "feather"), "char"],
         "overlapType": [kwargs.get("overlapType", ""), "char"],
         "xcorrShift": [kwargs.get("xcorrShift", True), "logical"],
         "xyMaxOffset": [kwargs.get("xyMaxOffset", [300]), "numericArr"],
         "zMaxOffset": [kwargs.get("zMaxOffset", 50), "numericScalar"],
         "xcorrDownsample": [kwargs.get("xcorrDownsample", [2,2,1]), "numericArr"],
         "xcorrThresh": [kwargs.get("xcorrThresh", 0.25), "numericScalar"],
-        "padSize": [kwargs.get("padSize", []), "numericArr"],
         "outBbox": [kwargs.get("outBbox", []), "numericArr"],
         "xcorrMode": [kwargs.get("xcorrMode", "primaryFirst"), "char"],
         "shiftMethod": [kwargs.get("shiftMethod", "grid"), "char"],
@@ -48,7 +47,7 @@ def XR_matlab_stitching_wrapper(dataPath, imageListFileName, **kwargs):
         "groupFile": [kwargs.get("groupFile", ""), "char"],
         "primaryCh": [kwargs.get("primaryCh", ""), "char"],
         "usePrimaryCoords": [kwargs.get("usePrimaryCoords", False), "logical"],
-        "save16bit": [kwargs.get("save16bit", False), "logical"],
+        "save16bit": [kwargs.get("save16bit", True), "logical"],
         "edgeArtifacts": [kwargs.get("edgeArtifacts", 0), "numericScalar"],
         "distBboxes": [kwargs.get("distBboxes", []), "numericArr"],
         "saveMIP": [kwargs.get("saveMIP", True), "logical"],
@@ -68,9 +67,9 @@ def XR_matlab_stitching_wrapper(dataPath, imageListFileName, **kwargs):
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
     matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
-    dataPathString = "{" + ",".join(f"'{item}'" for item in dataPath) + "}"
-    imageListFileNameString = "{" + ",".join(f"'{item}'" for item in imageListFileName) + "}"
-    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathString}\" \"{imageListFileNameString}\" "
+    dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
+    imageListFullpathsString = "{" + ",".join(f"'{item}'" for item in imageListFullpaths) + "}"
+    cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{imageListFullpathsString}\" "
     
     for key, value in XR_matlab_stitching_wrapper_dict.items():
         if value[1] == "char":

@@ -16,7 +16,7 @@ def XR_psf_analysis_wrapper(dataPaths, **kwargs):
         "channels": [kwargs.get("channels", [488,560]), "numericArr"],
         "save16bit": [kwargs.get("save16bit", True), "logical"],
         "bgFactor": [kwargs.get("bgFactor", 1.5), "numericScalar"],
-        "RWFn": [kwargs.get("RWFn", ['/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_515em_128_128_101_100nmSteps.tif','/clusterfs/fiona/Gokul/RW_PSFs/PSF_RW_605em_128_128_101_100nmSteps.tif']), "cell"],
+        "RWFn": [kwargs.get("RWFn", ['','']), "cell"],
         "sourceStr": [kwargs.get("sourceStr", "test"), "char"],
         "visible": [kwargs.get("visible", True), "logical"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],

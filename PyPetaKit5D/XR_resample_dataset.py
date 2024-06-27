@@ -11,7 +11,7 @@ def XR_resample_dataset(dataPaths, resampleFactor, **kwargs):
         "interpMethod": [kwargs.get("interpMethod", "linear"), "char"],
         "save16bit": [kwargs.get("save16bit", True), "logical"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
-        "largeZarr": [kwargs.get("largeZarr", False), "logical"],
+        "largeFile": [kwargs.get("largeFile", False), "logical"],
         "saveZarr": [kwargs.get("saveZarr", False), "logical"],
         "blockSize": [kwargs.get("blockSize", [256,256,256]), "numericArr"],
         "batchSize": [kwargs.get("batchSize", [512,512,512]), "numericArr"],

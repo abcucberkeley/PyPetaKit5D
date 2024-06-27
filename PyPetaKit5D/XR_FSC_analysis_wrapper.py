@@ -18,7 +18,7 @@ def XR_FSC_analysis_wrapper(dataPaths, **kwargs):
         "resAxis": [kwargs.get("resAxis", "xz"), "char"],
         "skipConeRegion": [kwargs.get("skipConeRegion", True), "logical"],
         "channelPatterns": [kwargs.get("channelPatterns", ['tif']), "cell"],
-        "Channels": [kwargs.get("Channels", [488,560]), "numericArr"],
+        "channels": [kwargs.get("channels", [488,560]), "numericArr"],
         "multiRegions": [kwargs.get("multiRegions", False), "logical"],
         "regionInterval": [kwargs.get("regionInterval", [50,50,-1]), "numericArr"],
         "regionGrid": [kwargs.get("regionGrid", []), "numericScalar"],

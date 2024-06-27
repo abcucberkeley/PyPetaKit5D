@@ -14,8 +14,7 @@ def XR_microscopeAutomaticProcessing(dataPaths, **kwargs):
         "reverse": [kwargs.get("reverse", True), "logical"],
         "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
         "zStageScan": [kwargs.get("zStageScan", False), "logical"],
-        "save16bit": [kwargs.get("save16bit", [False,False,False,False]), "logicalArr"],
-        "onlyFirstTP": [kwargs.get("onlyFirstTP", False), "logical"],
+        "save16bit": [kwargs.get("save16bit", [True,True]), "logicalArr"],
         "dzFromEncoder": [kwargs.get("dzFromEncoder", False), "logical"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
         "saveZarr": [kwargs.get("saveZarr", False), "logical"],
@@ -35,7 +34,6 @@ def XR_microscopeAutomaticProcessing(dataPaths, **kwargs):
         "resampleType": [kwargs.get("resampleType", "isotropic"), "char"],
         "resampleFactor": [kwargs.get("resampleFactor", []), "numericArr"],
         "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
-        "stitchPipeline": [kwargs.get("stitchPipeline", "zarr"), "char"],
         "stitchResultDirName": [kwargs.get("stitchResultDirName", ""), "char"],
         "imageListFullpaths": [kwargs.get("imageListFullpaths", ""), "cell"],
         "axisOrder": [kwargs.get("axisOrder", "xyz"), "char"],
@@ -49,7 +47,6 @@ def XR_microscopeAutomaticProcessing(dataPaths, **kwargs):
         "stitchMIP": [kwargs.get("stitchMIP", []), "logicalArr"],
         "onlineStitch": [kwargs.get("onlineStitch", False), "logical"],
         "generateImageList": [kwargs.get("generateImageList", ""), "char"],
-        "largeFile": [kwargs.get("largeFile", False), "logical"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "masterCompute": [kwargs.get("masterCompute", True), "logical"],
         "jobLogDir": [kwargs.get("jobLogDir", "../job_logs"), "char"],
@@ -61,8 +58,7 @@ def XR_microscopeAutomaticProcessing(dataPaths, **kwargs):
         "maxModifyTime": [kwargs.get("maxModifyTime", 10), "numericScalar"],
         "maxWaitLoopNum": [kwargs.get("maxWaitLoopNum", 10), "numericScalar"],
         "mccMode": [kwargs.get("mccMode", False), "logical"],
-        "configFile": [kwargs.get("configFile", ""), "char"],
-        "GPUConfigFile": [kwargs.get("GPUConfigFile", ""), "char"]
+        "configFile": [kwargs.get("configFile", ""), "char"]
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
