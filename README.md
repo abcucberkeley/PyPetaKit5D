@@ -1,4 +1,5 @@
 # PyPetaKit5D
+Python Wrappers for the [PetaKit5D](https://github.com/abcucberkeley/PetaKit5D) image processing pipeline
 
 ## Installation
 
