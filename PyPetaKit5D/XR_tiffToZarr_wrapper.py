@@ -16,6 +16,7 @@ def XR_tiffToZarr_wrapper(dataPaths, **kwargs):
         "channelPatterns": [kwargs.get("channelPatterns", ['tif']), "cell"],
         "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
         "tileOutBbox": [kwargs.get("tileOutBbox", []), "numericArr"],
+        "readWholeTiff": [kwargs.get("readWholeTiff", True), "logical"],
         "processFunPath": [kwargs.get("processFunPath", ""), "cell"],
         "parseCluster": [kwargs.get("parseCluster", False), "logical"],
         "bigData": [kwargs.get("bigData", True), "logical"],
