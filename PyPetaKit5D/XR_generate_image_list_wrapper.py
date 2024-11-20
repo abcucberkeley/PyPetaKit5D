@@ -7,6 +7,9 @@ def XR_generate_image_list_wrapper(dataPaths, generationMethod, **kwargs):
     XR_generate_image_list_wrapper_dict = {
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0']), "cell"],
         "tilePatterns": [kwargs.get("tilePatterns", ['0000t','ch0','000x','000y','000z']), "cell"],
+        "tileFilenames": [kwargs.get("tileFilenames", []), "cell"],
+        "tileIndices": [kwargs.get("tileIndices", []), "numericArr"],
+        "tileInterval": [kwargs.get("tileInterval", []), "numericArr"],
         "DS": [kwargs.get("DS", False), "logical"],
         "DSR": [kwargs.get("DSR", False), "logical"],
         "xyPixelSize": [kwargs.get("xyPixelSize", 0.108), "numericScalar"],
@@ -47,7 +50,10 @@ def XR_generate_image_list_wrapper(dataPaths, generationMethod, **kwargs):
                 continue
             if type(value[0]) is not list:
                 value[0] = [value[0]]
-            numericArrString = "[" + ",".join(str(item) for item in value[0]) + "]"
+            separator = ","
+            if key == "tileIndices":
+                separator = ";"
+            numericArrString = "[" + separator.join(str(item) for item in value[0]) + "]"
             cmdString += f"\"{key}\" \"{numericArrString}\" "
         elif value[1] == "numericScalar":
             if type(value[0]) is list:

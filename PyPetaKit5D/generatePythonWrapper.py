@@ -52,7 +52,7 @@ def generate_function(matlab_file_path):
     functionString = functionString + f"**kwargs):\n    function_name = \"{function_name}\"\n    {function_name}_dict = {{\n        "
     varTypes = [""] * len(input_parser_params)
     # Have to hard code some variables that are ambiguous at the moment
-    numericArrVars = ["shardSize", "zarrSubSize", "padSize", "boundboxCrop", "timepoints", "subtimepoints", "overlapSize"]
+    numericArrVars = ["shardSize", "zarrSubSize", "padSize", "boundboxCrop", "timepoints", "subtimepoints", "overlapSize", "tileIndices", "tileInterval"]
     logicalArrVars = ["stitchMIP"]
     for i, (param, firstString) in enumerate(zip(input_parser_params, first_strings)):
         extracted_string = ""
@@ -133,6 +133,14 @@ def generate_function(matlab_file_path):
         else:
             functionString += f"\\\"{{{firstString}String}}\\\" "
     functionString += "\"\n    "
+    numericArrString = "numericArrString = \"[\" + \",\".join(str(item) for item in value[0]) + \"]\""
+    if function_name == "XR_generate_image_list_wrapper":
+        numericArrString = f"""
+            separator = ","
+            if key == "tileIndices":
+                separator = ";"
+            numericArrString = "[" + separator.join(str(item) for item in value[0]) + "]"
+            """.strip()
     functionString += f"""
     for key, value in {function_name}_dict.items():
         if value[1] == "char":
@@ -154,7 +162,7 @@ def generate_function(matlab_file_path):
                 continue
             if type(value[0]) is not list:
                 value[0] = [value[0]]
-            numericArrString = "[" + ",".join(str(item) for item in value[0]) + "]"
+            {numericArrString}
             cmdString += f"\\\"{{key}}\\\" \\\"{{numericArrString}}\\\" "
         elif value[1] == "numericScalar":
             if type(value[0]) is list:

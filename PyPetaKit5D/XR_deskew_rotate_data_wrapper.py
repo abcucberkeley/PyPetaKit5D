@@ -20,6 +20,8 @@ def XR_deskew_rotate_data_wrapper(dataPaths, **kwargs):
         "flipZstack": [kwargs.get("flipZstack", False), "logical"],
         "parseSettingFile": [kwargs.get("parseSettingFile", False), "logical"],
         "crop": [kwargs.get("crop", False), "logical"],
+        "inputAxisOrder": [kwargs.get("inputAxisOrder", "yxz"), "char"],
+        "outputAxisOrder": [kwargs.get("outputAxisOrder", "yxz"), "char"],
         "DSRCombined": [kwargs.get("DSRCombined", True), "logical"],
         "FFCorrection": [kwargs.get("FFCorrection", False), "logical"],
         "BKRemoval": [kwargs.get("BKRemoval", False), "logical"],
