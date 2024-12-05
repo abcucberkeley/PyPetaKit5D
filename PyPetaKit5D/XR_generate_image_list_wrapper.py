@@ -20,7 +20,7 @@ def XR_generate_image_list_wrapper(dataPaths, generationMethod, **kwargs):
         "objectiveScan": [kwargs.get("objectiveScan", False), "logical"],
         "IOScan": [kwargs.get("IOScan", False), "logical"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
-        "overlapSize": [kwargs.get("overlapSize", []), "numericArr"],
+        "overlapSize": [kwargs.get("overlapSize", [10,10,10]), "numericArr"],
         "overlapSizeType": [kwargs.get("overlapSizeType", "pixel"), "char"],
         "uuid": [kwargs.get("uuid", ""), "char"]
     }
