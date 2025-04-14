@@ -11,13 +11,13 @@ from setuptools.command.install import install
 matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2023a/Release/6/deployment_files"
                       "/installer/complete/glnxa64/MATLAB_Runtime_R2023a_Update_6_glnxa64.zip")
 name = 'PyPetaKit5D'
-version = '1.2.7'
+version = '1.3.0'
 
 
 class CustomInstall(install):
     def download_and_extract_matlab_runtime(self, install_dir):
-        petakit5d_url = "https://github.com/abcucberkeley/PetaKit5D/archive/refs/heads/main.zip"
-        petakit5d_github_dir = os.path.join(install_dir, "PetaKit5D-main")
+        petakit5d_url = "https://github.com/abcucberkeley/PetaKit5D/archive/refs/tags/v1.3.0.zip"
+        petakit5d_github_dir = os.path.join(install_dir, "PetaKit5D-1.3.0")
         petakit5d_dir = os.path.join(install_dir, "PetaKit5D")
         petakit5d_zip_loc = os.path.join(install_dir, "PetaKit5D.zip")
 
