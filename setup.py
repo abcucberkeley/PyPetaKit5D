@@ -4,58 +4,43 @@ import site
 import subprocess
 import sys
 import urllib.request
-
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
-matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2023a/Release/6/deployment_files"
-                      "/installer/complete/glnxa64/MATLAB_Runtime_R2023a_Update_6_glnxa64.zip")
 name = 'PyPetaKit5D'
-version = '1.3.0'
+version = '1.4.0'
 
 
 class CustomInstall(install):
     def download_and_extract_matlab_runtime(self, install_dir):
-        petakit5d_url = "https://github.com/abcucberkeley/PetaKit5D/archive/refs/tags/v1.3.0.zip"
-        petakit5d_github_dir = os.path.join(install_dir, "PetaKit5D-1.3.0")
+        petakit5d_url = "https://github.com/abcucberkeley/PetaKit5D/releases/download/v1.4.0/PetaKit5D-1.4.0-Linux-x64.tar.gz"
         petakit5d_dir = os.path.join(install_dir, "PetaKit5D")
-        petakit5d_zip_loc = os.path.join(install_dir, "PetaKit5D.zip")
+        petakit5d_tar_loc = os.path.join(install_dir, "PetaKit5D.tar.gz")
 
-        matlab_runtime_tmp_dir = os.path.join(install_dir, "matlabRuntimeTmp")
         matlab_runtime_dir = os.path.join(install_dir, "MATLAB_Runtime")
-        matlab_runtime_zip_loc = os.path.join(install_dir, "matlabRuntime.zip")
 
         # Download and extract PetaKit5D and the MATLAB runtime
         try:
             if os.path.exists(petakit5d_dir):
                 shutil.rmtree(petakit5d_dir)
-            os.makedirs(os.path.dirname(petakit5d_zip_loc), exist_ok=True)
-            if not os.path.exists(petakit5d_zip_loc):
-                urllib.request.urlretrieve(petakit5d_url, petakit5d_zip_loc)
+            os.makedirs(os.path.dirname(petakit5d_tar_loc), exist_ok=True)
+            if not os.path.exists(petakit5d_tar_loc):
+                urllib.request.urlretrieve(petakit5d_url, petakit5d_tar_loc)
             process = subprocess.Popen(
-                f"unzip -o -q \"{petakit5d_zip_loc}\" -d \"{install_dir}\"", shell=True)
+                f"tar -xf \"{petakit5d_tar_loc}\" -C \"{install_dir}\"",
+                shell=True
+            )
             process.wait()
-            os.rename(petakit5d_github_dir, petakit5d_dir)
-            os.remove(petakit5d_zip_loc)
+            os.remove(petakit5d_tar_loc)
 
-            matlab_runtime_ver_dir = os.path.join(matlab_runtime_dir, "R2023a")
+            matlab_runtime_ver_dir = os.path.join(matlab_runtime_dir, "R2024b")
             if not os.path.exists(matlab_runtime_ver_dir) or not os.listdir(matlab_runtime_ver_dir):
-                os.makedirs(os.path.dirname(matlab_runtime_zip_loc), exist_ok=True)
-                # Download MATLAB runtime
-                if not os.path.exists(matlab_runtime_zip_loc):
-                    urllib.request.urlretrieve(matlab_runtime_url, matlab_runtime_zip_loc)
-                process = subprocess.Popen(
-                    f"unzip -o -q \"{matlab_runtime_zip_loc}\" -d \"{matlab_runtime_tmp_dir}\"", shell=True)
-                process.wait()
-
-                install_file_loc = f"{matlab_runtime_tmp_dir}/install"
+                install_file_loc = f"{petakit5d_dir}/mcc/installMCR/installMCR.install"
 
                 process = subprocess.Popen(
                     f"\"{install_file_loc}\" -agreeToLicense yes -destinationFolder \"{matlab_runtime_dir}\"",
                     shell=True)
                 process.wait()
-                os.remove(matlab_runtime_zip_loc)
-                shutil.rmtree(matlab_runtime_tmp_dir)
         except Exception as e:
             sys.stderr.write("Error downloading/extracting MATLAB runtime: {}\n".format(str(e)))
             sys.exit(1)

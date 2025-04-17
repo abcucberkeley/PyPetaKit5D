@@ -26,7 +26,7 @@ def XR_resample_dataset(dataPaths, resampleFactor, **kwargs):
     }
 
     mccMasterLoc = f"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh"
-    matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a"
+    matlabRuntimeLoc = f"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2024b"
     dataPathsString = "{" + ",".join(f"'{item}'" for item in dataPaths) + "}"
     resampleFactorString = "[" + ",".join(str(item) for item in resampleFactor) + "]"
     cmdString = f"\"{mccMasterLoc}\" \"{matlabRuntimeLoc}\" {function_name} \"{dataPathsString}\" \"{resampleFactorString}\" "

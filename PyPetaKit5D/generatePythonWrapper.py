@@ -113,7 +113,7 @@ def generate_function(matlab_file_path):
         functionString += "mccMasterLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux_with_jvm/run_mccMaster.sh\"\n    "
     else:
         functionString += "mccMasterLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/PetaKit5D/mcc/linux/run_mccMaster.sh\"\n    "
-    functionString += "matlabRuntimeLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2023a\"\n    "
+    functionString += "matlabRuntimeLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2024b\"\n    "
     for i, firstString in enumerate(first_strings[:numRequired]):
         if varTypes[i] == "cell":
             functionString += f"{firstString}String = \"{{\" + \",\".join(f\"\'{{item}}\'\" for item in {firstString}) + \"}}\"\n    "
