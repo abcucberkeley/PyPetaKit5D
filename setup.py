@@ -7,8 +7,11 @@ import urllib.request
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
+matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2024b/Release/5/deployment_files/installer"
+                      "/complete/glnxa64/MATLAB_Runtime_R2024b_Update_5_glnxa64.zip")
+
 name = 'PyPetaKit5D'
-version = '1.4.0'
+version = '1.4.1'
 
 
 class CustomInstall(install):
@@ -17,7 +20,9 @@ class CustomInstall(install):
         petakit5d_dir = os.path.join(install_dir, "PetaKit5D")
         petakit5d_tar_loc = os.path.join(install_dir, "PetaKit5D.tar.gz")
 
+        matlab_runtime_tmp_dir = os.path.join(install_dir, "matlabRuntimeTmp")
         matlab_runtime_dir = os.path.join(install_dir, "MATLAB_Runtime")
+        matlab_runtime_zip_loc = os.path.join(install_dir, "matlabRuntime.zip")
 
         # Download and extract PetaKit5D and the MATLAB runtime
         try:
@@ -36,11 +41,32 @@ class CustomInstall(install):
             matlab_runtime_ver_dir = os.path.join(matlab_runtime_dir, "R2024b")
             if not os.path.exists(matlab_runtime_ver_dir) or not os.listdir(matlab_runtime_ver_dir):
                 install_file_loc = f"{petakit5d_dir}/mcc/installMCR/installMCR.install"
-
-                process = subprocess.Popen(
-                    f"\"{install_file_loc}\" -agreeToLicense yes -destinationFolder \"{matlab_runtime_dir}\"",
-                    shell=True)
-                process.wait()
+                try:
+                    process = subprocess.Popen(
+                        f"\"{install_file_loc}\" -agreeToLicense yes -destinationFolder \"{matlab_runtime_dir}\"",
+                        shell=True)
+                    ret = process.wait()
+                    if ret:
+                        raise ValueError("Intial MCR install method failed!")
+                except Exception as e:
+                    sys.stderr.write("{} Trying the alternative install method.\n".format(str(e)))
+                    os.makedirs(os.path.dirname(matlab_runtime_zip_loc), exist_ok=True)
+                    if not os.path.exists(matlab_runtime_zip_loc):
+                        urllib.request.urlretrieve(matlab_runtime_url, matlab_runtime_zip_loc)
+                    process = subprocess.Popen(
+                        f"unzip -o -q \"{matlab_runtime_zip_loc}\" -d \"{matlab_runtime_tmp_dir}\"", shell=True)
+                    ret = process.wait()
+                    if ret:
+                        raise ValueError("Unzipping the MCR failed!")
+                    install_file_loc = f"{matlab_runtime_tmp_dir}/install"
+                    process = subprocess.Popen(
+                        f"\"{install_file_loc}\" -agreeToLicense yes -destinationFolder \"{matlab_runtime_dir}\"",
+                        shell=True)
+                    ret = process.wait()
+                    os.remove(matlab_runtime_zip_loc)
+                    shutil.rmtree(matlab_runtime_tmp_dir)
+                    if ret:
+                        raise ValueError("Alternative MCR install method failed!")
         except Exception as e:
             sys.stderr.write("Error downloading/extracting MATLAB runtime: {}\n".format(str(e)))
             sys.exit(1)
