@@ -3,7 +3,7 @@ Python Wrappers for the [PetaKit5D](https://github.com/abcucberkeley/PetaKit5D) 
 
 ## Installation
 
-This package is currently only available for Linux and has been tested with Python 3.11 but other versions may also work
+This package is currently only available for Linux and has been tested with Python 3.11, but other versions may also work
 
 The installation may take a long time
 ````
@@ -12,9 +12,9 @@ pip install --no-binary :all: --no-cache-dir PyPetaKit5D
 
 ## Uninstallation
 
-It is recommended to use -v as it makes the uninstall much faster for this package
+This script will remove the MCR and PetaKit5D installations as well as the PyPetaKit5D pip package
 ````
-pip uninstall PyPetaKit5D -v
+uninstall-pypetakit5d
 ````
 
 ## Usage
