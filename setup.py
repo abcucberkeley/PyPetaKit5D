@@ -1,4 +1,5 @@
 import os
+import platform
 import shutil
 import site
 import subprocess
@@ -11,11 +12,17 @@ matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2024b/R
                       "/complete/glnxa64/MATLAB_Runtime_R2024b_Update_5_glnxa64.zip")
 
 name = 'PyPetaKit5D'
-version = '1.4.1'
+version = '1.4.2'
 
 
 class CustomInstall(install):
     def download_and_extract_matlab_runtime(self, install_dir):
+        try:
+            if platform.system() != "Linux":
+                raise ValueError("This package is only supported on Linux!")
+        except Exception as e:
+            sys.stderr.write("{}\n".format(str(e)))
+            sys.exit(1)
         petakit5d_url = "https://github.com/abcucberkeley/PetaKit5D/releases/download/v1.4.0/PetaKit5D-1.4.0-Linux-x64.tar.gz"
         petakit5d_dir = os.path.join(install_dir, "PetaKit5D")
         petakit5d_tar_loc = os.path.join(install_dir, "PetaKit5D.tar.gz")
@@ -92,6 +99,11 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python :: 3.11',
     ],
+    entry_points={
+        'console_scripts': [
+            'uninstall-pypetakit5d = PyPetaKit5D.uninstall:main',
+        ],
+    },
     cmdclass={
         'install': CustomInstall,
     }
