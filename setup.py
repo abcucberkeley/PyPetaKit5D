@@ -8,11 +8,11 @@ import urllib.request
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
-matlab_runtime_url = ("https://ssd.mathworks.com/supportfiles/downloads/R2024b/Release/5/deployment_files/installer"
-                      "/complete/glnxa64/MATLAB_Runtime_R2024b_Update_5_glnxa64.zip")
+matlab_runtime_url = "https://ssd.mathworks.com/supportfiles/downloads/R2024b/Release/6/deployment_files/installer/complete/glnxa64/MATLAB_Runtime_R2024b_Update_6_glnxa64.zip"
 
 name = 'PyPetaKit5D'
-version = '1.4.2'
+version = '1.4.3'
+petakit5d_version = '1.4.1'
 
 
 class CustomInstall(install):
@@ -23,7 +23,7 @@ class CustomInstall(install):
         except Exception as e:
             sys.stderr.write("{}\n".format(str(e)))
             sys.exit(1)
-        petakit5d_url = "https://github.com/abcucberkeley/PetaKit5D/releases/download/v1.4.0/PetaKit5D-1.4.0-Linux-x64.tar.gz"
+        petakit5d_url = f"https://github.com/abcucberkeley/PetaKit5D/releases/download/v{petakit5d_version}/PetaKit5D-{petakit5d_version}-Linux-x64.tar.gz"
         petakit5d_dir = os.path.join(install_dir, "PetaKit5D")
         petakit5d_tar_loc = os.path.join(install_dir, "PetaKit5D.tar.gz")
 
