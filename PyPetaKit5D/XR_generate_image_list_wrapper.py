@@ -6,6 +6,7 @@ def XR_generate_image_list_wrapper(dataPaths, generationMethod, **kwargs):
     function_name = "XR_generate_image_list_wrapper"
     XR_generate_image_list_wrapper_dict = {
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0']), "cell"],
+        "mapTilename": [kwargs.get("mapTilename", True), "logical"],
         "tilePatterns": [kwargs.get("tilePatterns", ['0000t','ch0','000x','000y','000z']), "cell"],
         "tileFilenames": [kwargs.get("tileFilenames", []), "cell"],
         "tileIndices": [kwargs.get("tileIndices", []), "numericArr"],
