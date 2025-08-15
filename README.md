@@ -1,3 +1,5 @@
+![PyPI - Version](https://img.shields.io/pypi/v/pypetakit5d)
+
 # PyPetaKit5D
 Python Wrappers for the [PetaKit5D](https://github.com/abcucberkeley/PetaKit5D) image processing pipeline
 
