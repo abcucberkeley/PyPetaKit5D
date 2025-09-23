@@ -52,7 +52,7 @@ def generate_function(matlab_file_path):
     functionString = functionString + f"**kwargs):\n    function_name = \"{function_name}\"\n    {function_name}_dict = {{\n        "
     varTypes = [""] * len(input_parser_params)
     # Have to hard code some variables that are ambiguous at the moment
-    numericArrVars = ["shardSize", "zarrSubSize", "padSize", "boundboxCrop", "timepoints", "subtimepoints", "overlapSize", "tileIndices", "tileInterval"]
+    numericArrVars = ["shardSize", "zarrSubSize", "padSize", "boundboxCrop", "timepoints", "subtimepoints", "overlapSize", "tileIndices", "tileInterval", "chromaticOffset", "unmixFactors", "unmixSigmas"]
     logicalArrVars = ["stitchMIP"]
     for i, (param, firstString) in enumerate(zip(input_parser_params, first_strings)):
         extracted_string = ""
@@ -134,10 +134,10 @@ def generate_function(matlab_file_path):
             functionString += f"\\\"{{{firstString}String}}\\\" "
     functionString += "\"\n    "
     numericArrString = "numericArrString = \"[\" + \",\".join(str(item) for item in value[0]) + \"]\""
-    if function_name == "XR_generate_image_list_wrapper":
+    if function_name == "XR_generate_image_list_wrapper" or function_name == "XR_chromatic_shift_correction_data_wrapper":
         numericArrString = f"""
             separator = ","
-            if key == "tileIndices":
+            if key == {'"tileIndices"' if function_name == "XR_generate_image_list_wrapper" else '"chromaticOffset"'}:
                 separator = ";"
             numericArrString = "[" + separator.join(str(item) for item in value[0]) + "]"
             """.strip()

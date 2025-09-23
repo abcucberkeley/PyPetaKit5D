@@ -1,4 +1,5 @@
 from .XR_bioformats_to_tiff_or_zarr_wrapper import XR_bioformats_to_tiff_or_zarr_wrapper
+from .XR_chromatic_shift_correction_data_wrapper import XR_chromatic_shift_correction_data_wrapper
 from .XR_crop_dataset import XR_crop_dataset
 from .XR_decon_data_wrapper import XR_decon_data_wrapper
 from .XR_deskew_rotate_data_wrapper import XR_deskew_rotate_data_wrapper
@@ -14,6 +15,7 @@ from .XR_psf_detection_and_analysis_wrapper import XR_psf_detection_and_analysis
 from .XR_resample_dataset import XR_resample_dataset
 from .XR_resave_zarr_wrapper import XR_resave_zarr_wrapper
 from .XR_tiffToZarr_wrapper import XR_tiffToZarr_wrapper
+from .XR_unmix_channels_data_wrapper import XR_unmix_channels_data_wrapper
 from .XR_visualize_OTF_mask_segmentation import XR_visualize_OTF_mask_segmentation
 from .XR_zarrToTiff_wrapper import XR_zarrToTiff_wrapper
 from .generate_config_file import generate_config_file
