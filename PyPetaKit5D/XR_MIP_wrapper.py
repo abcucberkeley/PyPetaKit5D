@@ -8,6 +8,7 @@ def XR_MIP_wrapper(dataPaths, **kwargs):
         "resultDirName": [kwargs.get("resultDirName", "MIPs"), "char"],
         "axis": [kwargs.get("axis", [0,0,1]), "numericArr"],
         "channelPatterns": [kwargs.get("channelPatterns", ['CamA_ch0','CamA_ch1','CamB_ch0','CamB_ch1']), "cell"],
+        "inputBbox": [kwargs.get("inputBbox", []), "numericArr"],
         "zarrFile": [kwargs.get("zarrFile", False), "logical"],
         "largeFile": [kwargs.get("largeFile", False), "logical"],
         "batchSize": [kwargs.get("batchSize", [2048,2048,2048]), "numericArr"],
