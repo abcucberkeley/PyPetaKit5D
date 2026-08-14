@@ -11,7 +11,7 @@ from setuptools.command.install import install
 matlab_runtime_url = "https://ssd.mathworks.com/supportfiles/downloads/R2024b/Release/6/deployment_files/installer/complete/glnxa64/MATLAB_Runtime_R2024b_Update_6_glnxa64.zip"
 
 name = 'PyPetaKit5D'
-version = '1.4.6.1'
+version = '1.4.7'
 petakit5d_version = '1.4.6'
 
 

@@ -41,7 +41,8 @@ def generate_function(matlab_file_path):
 
     if "_parser" in function_name:
         function_name = function_name.replace("_parser", "")
-    functionString = "import os\nimport subprocess\n\n\ndef " + function_name + "("
+    functionString = ("import os\nfrom ._mcc import matlab_array, matlab_cell, matlab_logical_array, run_mcc"
+                      "\n\n\ndef ") + function_name + "("
 
     # Count the number of strings with only one comma
     numRequired = sum(param.count(',') == 1 for param in input_parser_params)+num_optional
@@ -116,65 +117,62 @@ def generate_function(matlab_file_path):
     functionString += "matlabRuntimeLoc = f\"{os.path.dirname(os.path.abspath(__file__))}/MATLAB_Runtime/R2024b\"\n    "
     for i, firstString in enumerate(first_strings[:numRequired]):
         if varTypes[i] == "cell":
-            functionString += f"{firstString}String = \"{{\" + \",\".join(f\"\'{{item}}\'\" for item in {firstString}) + \"}}\"\n    "
+            functionString += f"{firstString}String = matlab_cell({firstString})\n    "
         elif varTypes[i] == "numericArr":
-            functionString += f"{firstString}String = \"[\" + \",\".join(str(item) for item in {firstString}) + \"]\"\n    "
+            functionString += f"{firstString}String = matlab_array({firstString})\n    "
         else:
             if firstString == "psfFn" or varTypes[i] == "char" or varTypes[i] == "numericScalar" or varTypes[i] == "logical":
                 continue
             # Assume it is a cell array otherwise
-            functionString += f"{firstString}String = \"{{\" + \",\".join(f\"\'{{item}}\'\" for item in {firstString}) + \"}}\"\n    "
-    functionString += "cmdString = f\"\\\"{mccMasterLoc}\\\" \\\"{matlabRuntimeLoc}\\\" {function_name} "
+            functionString += f"{firstString}String = matlab_cell({firstString})\n    "
+    cmdArgs = ["mccMasterLoc", "matlabRuntimeLoc", "function_name"]
     for i, firstString in enumerate(first_strings[:numRequired]):
         if varTypes[i] == "char" or varTypes[i] == "numericScalar":
-            functionString += f"\\\"{{{firstString}}}\\\" "
+            cmdArgs.append(firstString)
         elif varTypes[i] == "logical":
-            functionString += f"\\\"{{str({firstString}).lower()}}\\\" "
+            cmdArgs.append(f"str({firstString}).lower()")
         else:
-            functionString += f"\\\"{{{firstString}String}}\\\" "
-    functionString += "\"\n    "
-    numericArrString = "numericArrString = \"[\" + \",\".join(str(item) for item in value[0]) + \"]\""
+            cmdArgs.append(f"{firstString}String")
+    functionString += "cmdArgs = [" + ", ".join(cmdArgs) + "]\n    "
+    numericArrString = "numericArrString = matlab_array(value[0])"
     if function_name == "XR_generate_image_list_wrapper" or function_name == "XR_chromatic_shift_correction_data_wrapper":
         numericArrString = f"""
             separator = ","
             if key == {'"tileIndices"' if function_name == "XR_generate_image_list_wrapper" else '"chromaticOffset"'}:
                 separator = ";"
-            numericArrString = "[" + separator.join(str(item) for item in value[0]) + "]"
+            numericArrString = matlab_array(value[0], separator)
             """.strip()
     functionString += f"""
     for key, value in {function_name}_dict.items():
         if value[1] == "char":
             if not value[0]:
                 continue
-            cmdString += f"\\\"{{key}}\\\" \\\"{{value[0]}}\\\" "
+            cmdArgs += [key, value[0]]
         elif value[1] == "cell":
             if not value[0]:
                 continue
-            cellString = "{{" + ",".join(f"'{{item}}'" for item in value[0]) + "}}"
-            cmdString += f"\\\"{{key}}\\\" \\\"{{cellString}}\\\" "
+            cmdArgs += [key, matlab_cell(value[0])]
         elif value[1] == "logicalArr":
-            logicalArrString = "[" + ",".join(str(item) for item in value[0]) + "]"
-            cmdString += f"\\\"{{key}}\\\" \\\"{{str(logicalArrString).lower()}}\\\" "
+            cmdArgs += [key, matlab_logical_array(value[0])]
         elif value[1] == "logical":
-            cmdString += f"\\\"{{key}}\\\" {{str(value[0]).lower()}} "
+            cmdArgs += [key, str(value[0]).lower()]
         elif value[1] == "numericArr":
             if not value[0]:
                 continue
             if type(value[0]) is not list:
                 value[0] = [value[0]]
             {numericArrString}
-            cmdString += f"\\\"{{key}}\\\" \\\"{{numericArrString}}\\\" "
+            cmdArgs += [key, numericArrString]
         elif value[1] == "numericScalar":
             if type(value[0]) is list:
                 if not value[0]:
                     continue
                 else:
                     value[0] = value[0][0]
-            cmdString += f"\\\"{{key}}\\\" {{value[0]}} "
+            cmdArgs += [key, value[0]]
         else:
             continue
-    process = subprocess.Popen(cmdString, shell=True)
-    process.wait()
+    run_mcc(cmdArgs, function_name)
     """
     output_file = Path(f"/home/matt/PyPetaKit5D/PyPetaKit5D/{function_name}.py")
     output_file.parent.mkdir(exist_ok=True, parents=True)
